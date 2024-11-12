@@ -59,7 +59,7 @@ public class Controller {
      * @throws NaoEncontradoException se o login ou a senha estiverem incorretos.
      */
     public Usuario login (String login, String senha) {
-        boolean cadastrado = usuario.validarUsuario(login, senha);
+        boolean cadastrado = usuario.validarLogin(login, senha);
         if (cadastrado) {
             usuario.login(login, senha);
             return usuario;
@@ -178,17 +178,17 @@ public class Controller {
      * @throws FormaDePagamentoInvalidaException se não houver uma forma de pagamento válida.
      * @throws NaoLogadoException se o usuário não estiver logado.
      */
-//    public Ingresso comprarIngresso(Usuario usuario, Pagamento pagamento, String nomeDoEvento, String assento) {
-//        if (pagamento == null) {
-//            throw new FormaDePagamentoInvalidaException("É necessário adicionar uma forma de pagamento.");
-//        }
-//        if (!usuario.isLogado()) {
-//            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
-//        }
-//        evento = evento.buscarEventoPorNome(nomeDoEvento);
-//        ingresso = evento.comprarIngresso(usuario, pagamento, evento, assento); // Cria um novo ingresso.
-//        return ingresso;
-//    }
+    public Ingresso comprarIngresso(Usuario usuario, Pagamento pagamento, String nomeDoEvento, String assento) {
+        if (pagamento == null) {
+            throw new FormaDePagamentoInvalidaException("É necessário adicionar uma forma de pagamento.");
+        }
+        if (!usuario.isLogado()) {
+            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
+        }
+        evento = evento.buscarEventoPorNome(nomeDoEvento);
+        ingresso = evento.comprarIngresso(usuario, pagamento, evento, assento); // Cria um novo ingresso.
+        return ingresso;
+    }
 
     /**
      * Cancela compra de um ingresso.
@@ -198,13 +198,13 @@ public class Controller {
      * @return true se o cancelamento for bem-sucedido, false caso contrário.
      * @throws NaoLogadoException Se o usuário não estiver logado ao tentar cancelar a compra.
      */
-//    public boolean cancelarCompra(Usuario usuario, Ingresso ingresso) {
-//        if (usuario.isLogado()) {
-//            return usuario.cancelarIngressoComprado(usuario, ingresso);
-//        } else {
-//            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
-//        }
-//    }
+    public boolean cancelarCompra(Usuario usuario, Ingresso ingresso) {
+        if (usuario.isLogado()) {
+            return usuario.cancelarIngressoComprado(usuario, ingresso);
+        } else {
+            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
+        }
+    }
 
     /**
      * Escolhe forma de pagamento.
@@ -214,13 +214,13 @@ public class Controller {
      * @return forma de pagamento escolhida.
      * @throws NaoLogadoException Se o usuário não estiver logado ao tentar escolher a forma de pagamento.
      */
-//    public Pagamento escolherFormaDePagamento(Usuario usuario, Pagamento pagamento) {
-//        if (usuario.isLogado()) {
-//            return usuario.escolherFormaPagamento(pagamento);
-//        } else {
-//            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
-//        }
-//    }
+    public Pagamento escolherFormaDePagamento(Usuario usuario, Pagamento pagamento) {
+        if (usuario.isLogado()) {
+            return usuario.escolherFormaPagamento(pagamento);
+        } else {
+            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
+        }
+    }
 
     /**
      * Adiciona uma forma de pagamento ao usuário.
@@ -229,14 +229,14 @@ public class Controller {
      * @param pagamento forma de pagamento a ser adicionada.
      * @throws NaoLogadoException Se o usuário não estiver logado ao tentar adicionar uma forma de pagamento.
      */
-//    public void adicionarFormaPagamento (Usuario usuario, Pagamento pagamento) {
-//        if (usuario.isLogado()) {
-//            usuario.adicionarFormaDePagamento(pagamento);;  // Adiciona o pagamento à lista
-//
-//        } else {
-//            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
-//        }
-//    }
+    public void adicionarFormaPagamento (Usuario usuario, Pagamento pagamento) {
+        if (usuario.isLogado()) {
+            usuario.adicionarFormaDePagamento(pagamento);;  // Adiciona o pagamento à lista
+
+        } else {
+            throw new NaoLogadoException("É necessário estar logado para realizar essa ação.");
+        }
+    }
 
     /**
      * Confirma a compra de um ingresso.
@@ -245,9 +245,9 @@ public class Controller {
      * @param pagamento método de pagamento utilizado.
      * @return confirmação da compra.
      */
-//    public String confirmacaoDeCompra(Usuario usuario, Pagamento pagamento) {
-//        return usuario.getCompra().confirmarCompra(usuario, pagamento);
-//    }
+    public String confirmacaoDeCompra(Usuario usuario, Pagamento pagamento) {
+        return usuario.getCompra().confirmarCompra(usuario, pagamento);
+    }
 
 
     /**
@@ -281,10 +281,10 @@ public class Controller {
      * @param pagamento método de pagamento utilizado.
      * @return confirmação do reembolso.
      */
-//    public String reembolsarValor(Usuario usuario, Ingresso ingresso, Pagamento pagamento) {
-//        compra = new Compra(ingresso);
-//        return pagamento.reembolsarPagamento(usuario, compra);
-//    }
+    public String reembolsarValor(Usuario usuario, Ingresso ingresso, Pagamento pagamento) {
+        compra = new Compra(ingresso);
+        return pagamento.reembolsarPagamento(usuario, compra);
+    }
 
     /**
      * Lista as formas de pagamento disponíveis para usuário.
@@ -292,9 +292,9 @@ public class Controller {
      * @param usuario formas de pagamento do usuário.
      * @return lista de formas de pagamento do usuário.
      */
-//    public List<Pagamento> listarFormasDePagamento(Usuario usuario) {
-//        return usuario.getFormasDePagamento();
-//    }
+    public List<Pagamento> listarFormasDePagamento(Usuario usuario) {
+        return usuario.getFormasDePagamento();
+    }
 
     /**
      * Lista os eventos disponíveis no sistema.

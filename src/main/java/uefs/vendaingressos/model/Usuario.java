@@ -13,6 +13,10 @@
 
 package uefs.vendaingressos.model;
 
+import uefs.vendaingressos.model.excecoes.FormaDePagamentoInvalidaException;
+import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
+import uefs.vendaingressos.model.excecoes.ReembolsoException;
+
 import java.util.*;
 import java.util.List;
 
@@ -37,10 +41,13 @@ public class Usuario {
     private String email;
     private boolean adm;
     private boolean isLogado;
-//    private Compra compra;
+    private Compra compra;
     private static List<Usuario> usuariosCadastrados = new ArrayList<>();
-//    private List<Pagamento> formasDePagamento = new ArrayList<>();
-//    private List <Compra> ingressosComprados = new ArrayList<>();
+    private List<Pagamento> formasDePagamento = new ArrayList<>();
+    private List <Compra> ingressosComprados = new ArrayList<>();
+
+    public Usuario () {
+    }
 
     public Usuario(String login, String senha, String nome, String cpf, String email, boolean adm) {
         this.login = login;
@@ -50,6 +57,14 @@ public class Usuario {
         this.email = email;
         this.adm = adm;
         this.isLogado = false;
+    }
+
+    public Usuario(String login, String senha, String nome, String cpf, String email) {
+        this.login = login;
+        this.senha = senha;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
     }
 
     /**
@@ -83,13 +98,22 @@ public class Usuario {
      * @param senha  será a senha do usuário.
      * @return true se usuário estiver cadastrado, caso contrário, false.
      */
-    public boolean validarUsuario(String login, String senha) {
+    public boolean validarLogin(String login, String senha) {
         for (Usuario usuario : usuariosCadastrados) {
             if (usuario.getLogin().equals(login)) {
                 // Se o login estiver cadastrado, verifica a senha
                 if (usuario.getSenha().equals(senha)) {
                     return true; // Usuário encontrado
                 }
+            }
+        }
+        return false; // Usuário não encontrado
+    }
+
+    public boolean validarCadastro(String login, String email) {
+        for (Usuario usuario : usuariosCadastrados) {
+            if (usuario.getLogin().equals(login) || usuario.getEmail().equals(email)) {
+                return true; // Usuário encontrado
             }
         }
         return false; // Usuário não encontrado
@@ -111,93 +135,93 @@ public class Usuario {
         setLogado(false);
     }
 
-//    /**
-//     * Adiciona uma forma de pagamento à lista de formas de pagamento do usuário.
-//     *
-//     * @param pagamento a forma de pagamento que será adicionada.
-//     * @throws FormaDePagamentoInvalidaException se a forma de pagamento for inválida.
-//     */
-//    public void adicionarFormaDePagamento(Pagamento pagamento) {
-//        if (pagamento.getFormaDePagamento().equals("Boleto bancário") || pagamento.getFormaDePagamento().equals("Cartão")) {
-//            formasDePagamento.add(pagamento);
-//        } else {
-//            throw new FormaDePagamentoInvalidaException("Forma de pagamento inválida.");
-//        }
-//
-//    }
-//
-//    /**
-//     * Remove forma de pagamento da lista de formas de pagamento do usuário.
-//     *
-//     * @param pagamento a forma de pagamento que será removida.
-//     * @throws NaoEncontradoException se a forma de pagamento não for encontrada.
-//     */
-//    public void removerFormaDePagamento (Pagamento pagamento) {
-//        if (formasDePagamento.contains(pagamento)) {
-//            formasDePagamento.remove(pagamento);
-//        } else {
-//            throw new NaoEncontradoException("Forma de pagamento não encontrada.");
-//        }
-//
-//    }
-//
-//    /**
-//     * Escolhe uma forma de pagamento da lista de formas de pagamento do usuário.
-//     *
-//     * @param pagamento forma de pagamento escolhida.
-//     * @return forma de pagamento escolhida.
-//     * @throws NaoEncontradoException caso a forma de pagamento não for encontrada.
-//     */
-//    public Pagamento escolherFormaPagamento(Pagamento pagamento) {
-//        boolean contemPagamento = formasDePagamento.contains(pagamento);
-//        if (contemPagamento) {
-//            formasDePagamento.add(pagamento);
-//            return pagamento;
-//        } else {
-//            throw new NaoEncontradoException("Forma de pagamento não cadastrada.");
-//        }
-//    }
-//
-//    /**
-//     * Adiciona uma compra à lista de ingressos comprados pelo usuário.
-//     *
-//     * @param compra compra que será adicionada.
-//     */
-//    public void adicionarCompras(Compra compra) {
-//        this.compra = compra;
-//        ingressosComprados.add(compra);
-//    }
-//
-//    /**
-//     * Cancela ingresso comprado pelo usuário. Remove o ingresso da lista de ingressos comprados
-//     * pelo usuário, da lista de ingressos comprados do evento e altera o status da compra para "Cancelado".
-//     *
-//     * @param usuario o usuário que cancela a compra.
-//     * @param ingresso o ingresso que será cancelado.
-//     * @return true se o ingresso foi cancelado com sucesso, caso contrário, false.
-//     *
-//     * @throws ReembolsoException se a compra já tiver sido cancelada anteriormente.
-//     */
-//    public boolean cancelarIngressoComprado(Usuario usuario, Ingresso ingresso) {
-//        Iterator<Compra> iterator = ingressosComprados.iterator();
-//
-//        while (iterator.hasNext()) {
-//            Compra ing = iterator.next();
-//
-//            if (ing.getIngresso().equals(ingresso)) { // Procura por ingresso comprado
-//                boolean cancelar = ingresso.cancelarIngresso();
-//
-//                if (cancelar) { // Verifica se o ingresso foi encontrado
-//                    iterator.remove();
-//                    compra.cancelarCompra(usuario, compra); // Altera status da compra para cancelado
-//                    ingresso.getEvento().cancelarIngressoComprado(ingresso); // Cancela ingresso comprado do evento
-//                    return true; // Retorna true se o ingresso foi cancelado
-//                }
-//            }
-//        }
-//
-//        throw new ReembolsoException("A compra já foi cancelada anteriormente, e o reembolso já foi processado."); // Não encontrado ou fora do prazo
-//    }
+    /**
+     * Adiciona uma forma de pagamento à lista de formas de pagamento do usuário.
+     *
+     * @param pagamento a forma de pagamento que será adicionada.
+     * @throws FormaDePagamentoInvalidaException se a forma de pagamento for inválida.
+     */
+    public void adicionarFormaDePagamento(Pagamento pagamento) {
+        if (pagamento.getFormaDePagamento().equals("Boleto bancário") || pagamento.getFormaDePagamento().equals("Cartão")) {
+            formasDePagamento.add(pagamento);
+        } else {
+            throw new FormaDePagamentoInvalidaException("Forma de pagamento inválida.");
+        }
+
+    }
+
+    /**
+     * Remove forma de pagamento da lista de formas de pagamento do usuário.
+     *
+     * @param pagamento a forma de pagamento que será removida.
+     * @throws NaoEncontradoException se a forma de pagamento não for encontrada.
+     */
+    public void removerFormaDePagamento (Pagamento pagamento) {
+        if (formasDePagamento.contains(pagamento)) {
+            formasDePagamento.remove(pagamento);
+        } else {
+            throw new NaoEncontradoException("Forma de pagamento não encontrada.");
+        }
+
+    }
+
+    /**
+     * Escolhe uma forma de pagamento da lista de formas de pagamento do usuário.
+     *
+     * @param pagamento forma de pagamento escolhida.
+     * @return forma de pagamento escolhida.
+     * @throws NaoEncontradoException caso a forma de pagamento não for encontrada.
+     */
+    public Pagamento escolherFormaPagamento(Pagamento pagamento) {
+        boolean contemPagamento = formasDePagamento.contains(pagamento);
+        if (contemPagamento) {
+            formasDePagamento.add(pagamento);
+            return pagamento;
+        } else {
+            throw new NaoEncontradoException("Forma de pagamento não cadastrada.");
+        }
+    }
+
+    /**
+     * Adiciona uma compra à lista de ingressos comprados pelo usuário.
+     *
+     * @param compra compra que será adicionada.
+     */
+    public void adicionarCompras(Compra compra) {
+        this.compra = compra;
+        ingressosComprados.add(compra);
+    }
+
+    /**
+     * Cancela ingresso comprado pelo usuário. Remove o ingresso da lista de ingressos comprados
+     * pelo usuário, da lista de ingressos comprados do evento e altera o status da compra para "Cancelado".
+     *
+     * @param usuario o usuário que cancela a compra.
+     * @param ingresso o ingresso que será cancelado.
+     * @return true se o ingresso foi cancelado com sucesso, caso contrário, false.
+     *
+     * @throws ReembolsoException se a compra já tiver sido cancelada anteriormente.
+     */
+    public boolean cancelarIngressoComprado(Usuario usuario, Ingresso ingresso) {
+        Iterator<Compra> iterator = ingressosComprados.iterator();
+
+        while (iterator.hasNext()) {
+            Compra ing = iterator.next();
+
+            if (ing.getIngresso().equals(ingresso)) { // Procura por ingresso comprado
+                boolean cancelar = ingresso.cancelarIngresso();
+
+                if (cancelar) { // Verifica se o ingresso foi encontrado
+                    iterator.remove();
+                    compra.cancelarCompra(usuario, compra); // Altera status da compra para cancelado
+                    ingresso.getEvento().cancelarIngressoComprado(ingresso); // Cancela ingresso comprado do evento
+                    return true; // Retorna true se o ingresso foi cancelado
+                }
+            }
+        }
+
+        throw new ReembolsoException("A compra já foi cancelada anteriormente, e o reembolso já foi processado."); // Não encontrado ou fora do prazo
+    }
 
     /**
      * Método equals sobrescrito para comparar dois objetos Usuario.
@@ -235,16 +259,16 @@ public class Usuario {
      *
      * @return lista de ingressos comprados.
      */
-//    public List<Ingresso> getIngressos() {
-//        List <Ingresso>ingressosComprados = new ArrayList<>();
-//        for (Compra compra : this.ingressosComprados) {
-//            Ingresso ingresso = compra.getIngresso();
-//            if (ingresso != null) {
-//                ingressosComprados.add(ingresso);
-//            }
-//        }
-//        return ingressosComprados;
-//    }
+    public List<Ingresso> getIngressos() {
+        List <Ingresso>ingressosComprados = new ArrayList<>();
+        for (Compra compra : this.ingressosComprados) {
+            Ingresso ingresso = compra.getIngresso();
+            if (ingresso != null) {
+                ingressosComprados.add(ingresso);
+            }
+        }
+        return ingressosComprados;
+    }
 
     public void setSenha(String senha) {
         this.senha = senha;
@@ -279,21 +303,21 @@ public class Usuario {
         return senha;
     }
 
-//    public List<Pagamento> getFormasDePagamento() {
-//        return formasDePagamento;
-//    }
-//
-//    public List<Compra> getIngressosComprados() {
-//        return ingressosComprados;
-//    }
-//
-//    public List<Compra> getCompras() {
-//        return ingressosComprados;
-//    }
-//
-//    public Compra getCompra() {
-//        return compra;
-//    }
+    public List<Pagamento> getFormasDePagamento() {
+        return formasDePagamento;
+    }
+
+    public List<Compra> getIngressosComprados() {
+        return ingressosComprados;
+    }
+
+    public List<Compra> getCompras() {
+        return ingressosComprados;
+    }
+
+    public Compra getCompra() {
+        return compra;
+    }
 
     public static List<Usuario> getUsuariosCadastrados() {
         return usuariosCadastrados;

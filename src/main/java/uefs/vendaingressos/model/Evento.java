@@ -209,35 +209,35 @@ public class Evento {
      * @throws NaoEncontradoException      se o assento não estiver disponível.
      * @throws CompraNaoAutorizadaException se o pagamento não puder ser processado.
      */
-//    public Ingresso comprarIngresso(Usuario usuario, Pagamento pagamento, Evento evento, String assento) {
-//        // Verifica se o evento está ativo
-//        if (!isAtivo()) {
-//            throw new EventoForaDoPrazoException(evento.getNome());
-//        }
-//        // Verifica se o assento está disponível
-//        if (!buscaAssento(assento)) {
-//            throw new NaoEncontradoException("O assento " + assento + " não está disponível.");
-//        }
-//
-//        Ingresso ingresso = buscarPorIngresso(evento, assento);
-//
-//        Compra compra = new Compra(usuario, ingresso);
-//
-//        boolean resultado = compra.processarCompra(pagamento);
-//
-//        if (resultado) {
-//            ingressosComprados.add(ingresso); // Adiciona a lista de ingresso comprados do evento
-//            usuario.adicionarCompras(compra); // E também adiciona a lista de compras do usuário
-//            assentosReservados.add(assento); // Adiciona assento à lista de assentos reservados
-//
-//            removerIngressoDisponivel(ingresso); // Remove ingresso da lista de disponíveis
-//            removerAssentoDisponivel(assento); // Remove assento de disponíveis
-//
-//            return ingresso; // Retorna o ingresso vendido
-//        }
-//
-//        throw new CompraNaoAutorizadaException("Não foi possível processar o pagamento.");
-//    }
+    public Ingresso comprarIngresso(Usuario usuario, Pagamento pagamento, Evento evento, String assento) {
+        // Verifica se o evento está ativo
+        if (!isAtivo()) {
+            throw new EventoForaDoPrazoException(evento.getNome());
+        }
+        // Verifica se o assento está disponível
+        if (!buscaAssento(assento)) {
+            throw new NaoEncontradoException("O assento " + assento + " não está disponível.");
+        }
+
+        Ingresso ingresso = buscarPorIngresso(evento, assento);
+
+        Compra compra = new Compra(usuario, ingresso);
+
+        boolean resultado = compra.processarCompra(pagamento);
+
+        if (resultado) {
+            ingressosComprados.add(ingresso); // Adiciona a lista de ingresso comprados do evento
+            usuario.adicionarCompras(compra); // E também adiciona a lista de compras do usuário
+            assentosReservados.add(assento); // Adiciona assento à lista de assentos reservados
+
+            removerIngressoDisponivel(ingresso); // Remove ingresso da lista de disponíveis
+            removerAssentoDisponivel(assento); // Remove assento de disponíveis
+
+            return ingresso; // Retorna o ingresso vendido
+        }
+
+        throw new CompraNaoAutorizadaException("Não foi possível processar o pagamento.");
+    }
 
     /**
      * Cancela ingresso comprado pelo usuário. Remove o ingresso da lista de ingressos comprados

@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import uefs.vendaingressos.model.Usuario;
@@ -19,56 +20,108 @@ import java.util.List;
 public class TelaLoginController {
 
     @FXML
-    private Button botaoLogin;
+    private Button botaoEntrar;
+
+    @FXML
+    private Hyperlink botaoEsqueciSenha;
+
+    @FXML
+    private Hyperlink botaoIrCriarConta;
+
+    @FXML
+    private TextField campoLogin;
 
     @FXML
     private TextField campoSenha;
 
-    @FXML
-    private TextField campoUsuario;
+//    @FXML
+//    private Button botaoCriaConta;
 
-    private List<Usuario> usuariosCadastrados = new ArrayList<>();
+    @FXML
+    private Hyperlink botaoVoltar;
+
+
+    @FXML
+    private TextField campoCpf;
+
+    @FXML
+    private TextField campoEmail;
+
+    @FXML
+    private TextField campoNomeCompleto;
+
+    private Usuario usuario = new Usuario();
 
     @FXML
     public void fazerLogin(ActionEvent event) {
-        String usuario = campoUsuario.getText();
+        String user = campoLogin.getText();
         String senha = campoSenha.getText();
 
-        Usuario usuarioAtivo = validarLogin(usuario, senha);
+        boolean usuarioAtivo = usuario.validarLogin(user, senha);
 
-
-        if (usuarioAtivo != null) {
+        if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo) {
             System.out.println("Fez o login com sucesso.");
-            //abrirProximaTela();
+            //abrirTelaEvento();
         } else {
             exibirMensagemdeErro( "Erro ao fazer login","Usuário ou senha incorretos.\nTente novamente.");
         }
-
     }
 
-    public Usuario validarLogin(String login, String senha) {
-        for (Usuario usuario : usuariosCadastrados) {  // Verifica cada usuário na lista
-            if (usuario.getLogin().equals(login) && usuario.getSenha().equals(senha)) {
-                return usuario;  // Se encontrou, retorna o usuário
-            }
-        }
-        return null;  // Se não encontrou, retorna null
-    }
-
-    public void abrirProximaTela(String arquivoFxml) {
+    @FXML
+    public void abrirTelaCadastro(ActionEvent event) {
         try {
-            // Carrega o arquivo da próxima tela (certifique-se que o nome está correto)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(arquivoFxml));
-            Parent proximaCena = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaCadastro.fxml"));
+            Parent telaCadastro = loader.load();
 
-            // Pega a janela atual e troca a cena para a nova tela
-            Stage stage = (Stage) botaoLogin.getScene().getWindow();
-            stage.setScene(new Scene(proximaCena));  // Define a nova cena
+            Stage stage = (Stage) botaoIrCriarConta.getScene().getWindow();
+            stage.setScene(new Scene(telaCadastro));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();  // Imprime o erro se algo der errado
-            exibirMensagemdeErro("Erro", "Não foi possível abrir a próxima tela.");
+            e.printStackTrace();
+            exibirMensagemdeErro("Erro", "Não foi possível abrir a tela de cadastro.");
         }
+    }
+
+    @FXML
+    void fazerCadastro(ActionEvent event) {
+
+        String nome = campoNomeCompleto.getText();
+        String cpf = campoCpf.getText();
+        String email = campoEmail.getText();
+        String login = campoLogin.getText();
+        String senha = campoSenha.getText();
+
+        boolean usuarioCadastrado = usuario.validarCadastro(login, email);
+
+        if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || login.isEmpty() || senha.isEmpty()) {
+            exibirMensagemdeErro( "Erro ao fazer cadastro","É necessário preencher todos os campos.");
+        } else if (usuarioCadastrado) {
+            exibirMensagemdeErro( "Erro ao fazer cadastro","Já existe um cadastro com este e-mail ou login.");
+        } else {
+            usuario.cadastroDeUsuarios(new Usuario(login, senha, nome, cpf, email));
+            System.out.println("Fez cadastro com sucesso.");
+            abrirTelaLogin();
+        }
+    }
+
+    @FXML
+    void abrirTelaLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaLogin.fxml"));
+            Parent telaLogin = loader.load();
+
+            Stage stage = (Stage) botaoVoltar.getScene().getWindow();
+            stage.setScene(new Scene(telaLogin));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            exibirMensagemdeErro("Erro", "Não foi possível voltar para tela de login.");
+        }
+    }
+
+    @FXML
+    void alterarSenha(ActionEvent event) {
+
     }
 
     public void exibirMensagemdeErro(String titulo, String mensagemErro) {
@@ -79,12 +132,24 @@ public class TelaLoginController {
     }
 
 
-    public void alterarSenha(ActionEvent actionEvent) {
 
-    }
+//    public void abrirTelaEvento(String arquivoFxml) {
+//        try {
+//            // Carrega o arquivo da próxima tela (certifique-se que o nome está correto)
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(arquivoFxml));
+//            Parent proximaCena = loader.load();
+//
+//            // Pega a janela atual e troca a cena para a nova tela
+//            Stage stage = (Stage) botaoLogin.getScene().getWindow();
+//            stage.setScene(new Scene(proximaCena));  // Define a nova cena
+//            stage.show();
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();  // Imprime o erro se algo der errado
+//            exibirMensagemdeErro("Erro", "Insira seus dados para continuar.");
+//        } catch (IOException e) {
+//            e.printStackTrace();  // Imprime o erro se algo der errado
+//            exibirMensagemdeErro("Erro", "Não foi possível abrir a próxima tela.");
+//        }
+//    }
 
-
-    public void fazerCadastro(ActionEvent actionEvent) {
-        abrirProximaTela("telaCadastro.fxml");
-    }
 }

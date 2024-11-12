@@ -13,10 +13,9 @@
 
 package uefs.vendaingressos.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import uefs.vendaingressos.model.excecoes.*;
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
@@ -82,27 +81,27 @@ public class Pagamento {
      *
      * @throws ReembolsoException se o pagamento já tiver sido reembolsado anteriormente
      */
-//    public String reembolsarPagamento(Usuario usuario, Compra compra) {
-//        this.compra = compra;
-//
-//        if (!reembolso) {
-//            reembolso = true;  // Marca o pagamento como reembolsado
-//
-//            // Gera arquivo GSON simulando o e-mail de reembolso
-//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            String json = gson.toJson(mensagemDeReembolso(usuario, formaDePagamento));
-//
-//            // Salva GSON em um arquivo
-//            try (FileWriter writer = new FileWriter("reembolso_compra.json")) {
-//                writer.write(json);
-//                return mensagemDeReembolso(usuario, formaDePagamento);
-//            } catch (IOException e) {
-//                return "Erro ao gerar arquivo de confirmação: " + e.getMessage();
-//            }
-//        } else {
-//            throw new ReembolsoException("O pagamento já foi reembolsado.");
-//        }
-//    }
+    public String reembolsarPagamento(Usuario usuario, Compra compra) {
+        this.compra = compra;
+
+        if (!reembolso) {
+            reembolso = true;  // Marca o pagamento como reembolsado
+
+            // Gera arquivo GSON simulando o e-mail de reembolso
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(mensagemDeReembolso(usuario, formaDePagamento));
+
+            // Salva GSON em um arquivo
+            try (FileWriter writer = new FileWriter("reembolso_compra.json")) {
+                writer.write(json);
+                return mensagemDeReembolso(usuario, formaDePagamento);
+            } catch (IOException e) {
+                return "Erro ao gerar arquivo de confirmação: " + e.getMessage();
+            }
+        } else {
+            throw new ReembolsoException("O pagamento já foi reembolsado.");
+        }
+    }
 
     /**
      * Gera a mensagem de reembolso para o usuário.

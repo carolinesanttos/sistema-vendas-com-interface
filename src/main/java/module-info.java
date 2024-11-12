@@ -10,6 +10,8 @@ module uefs.sistemavendas3 {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.google.gson;
+    requires junit;
 
     opens uefs.vendaingressos to javafx.fxml;
     exports uefs.vendaingressos;
