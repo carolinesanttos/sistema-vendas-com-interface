@@ -61,25 +61,31 @@ public class TelaLoginController {
 
         if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo) {
             System.out.println("Fez o login com sucesso.");
-            //abrirTelaEvento();
+            // Login válido - Redireciona para TelaCadastroEvento
+            App.abrirTela("telaCadastroEvento.fxml", "Cadastro de Eventos");
         } else {
             exibirMensagemdeErro( "Erro ao fazer login","Usuário ou senha incorretos.\nTente novamente.");
         }
     }
 
+//    @FXML
+//    public void abrirTelaCadastro(ActionEvent event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaCadastro.fxml"));
+//            Parent telaCadastro = loader.load();
+//
+//            Stage stage = (Stage) botaoIrCriarConta.getScene().getWindow();
+//            stage.setScene(new Scene(telaCadastro));
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            exibirMensagemdeErro("Erro", "Não foi possível abrir a tela de cadastro.");
+//        }
+//    }
+
     @FXML
     public void abrirTelaCadastro(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaCadastro.fxml"));
-            Parent telaCadastro = loader.load();
-
-            Stage stage = (Stage) botaoIrCriarConta.getScene().getWindow();
-            stage.setScene(new Scene(telaCadastro));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            exibirMensagemdeErro("Erro", "Não foi possível abrir a tela de cadastro.");
-        }
+        App.abrirTela("telaCadastro.fxml", "Cadastro");
     }
 
     @FXML
@@ -104,20 +110,26 @@ public class TelaLoginController {
         }
     }
 
+//    @FXML
+//    void abrirTelaLogin() {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaLogin.fxml"));
+//            Parent telaLogin = loader.load();
+//
+//            Stage stage = (Stage) botaoVoltar.getScene().getWindow();
+//            stage.setScene(new Scene(telaLogin));
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            exibirMensagemdeErro("Erro", "Não foi possível voltar para tela de login.");
+//        }
+//    }
+
     @FXML
     void abrirTelaLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaLogin.fxml"));
-            Parent telaLogin = loader.load();
-
-            Stage stage = (Stage) botaoVoltar.getScene().getWindow();
-            stage.setScene(new Scene(telaLogin));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            exibirMensagemdeErro("Erro", "Não foi possível voltar para tela de login.");
-        }
+        App.abrirTela("telaLogin.fxml", "Login");
     }
+
 
     @FXML
     void alterarSenha(ActionEvent event) {
