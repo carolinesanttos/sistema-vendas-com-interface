@@ -13,10 +13,12 @@
 
 package uefs.vendaingressos.model;
 
+import com.google.gson.annotations.Expose;
 import uefs.vendaingressos.model.Ingresso;
 import uefs.vendaingressos.model.excecoes.*;
 import uefs.vendaingressos.model.Usuario;
 import uefs.vendaingressos.model.Feedback;
+import uefs.vendaingressos.model.persistencia.PersistenciaEventos;
 
 import java.util.*;
 
@@ -27,17 +29,30 @@ import java.util.*;
  * Gerencia feedbacks e as compras realizadas pelos usuários.
  */
 public class Evento {
+    @Expose
     private String nome;
+    @Expose
     private String descricao;
+    @Expose
     private Date data;
+    @Expose
     private boolean status;
+    @Expose
     private Usuario usuario;
+    @Expose
     private static List<Evento> eventosCadastrados = new ArrayList<>();
+    @Expose
     private List<String> assentosDisponiveis = new ArrayList<>();
+    @Expose
     private List<String> assentosReservados = new ArrayList<>();
+    @Expose
     private List<Ingresso> ingressosDisponiveis = new ArrayList<>();
+    @Expose
     private List<Ingresso> ingressosComprados = new ArrayList<>();
+    @Expose
     private List<Feedback> feedbacks = new ArrayList<>();
+    @Expose
+    private PersistenciaEventos persistenciaEventos  = new PersistenciaEventos("detalhes-do-evento.json");
 
 
     public Evento(String nome, String descricao, Date data) {
@@ -68,10 +83,11 @@ public class Evento {
      * @throws SecurityException se o usuário não for um administrador.
      */
     public void cadastroDeEventos(Evento evento) {
-        if (!evento.getUsuario().isAdmin()) {
-            throw new SecurityException("Somente administradores podem cadastrar eventos.");
-        }
+//        if (!evento.getUsuario().isAdmin()) {
+//            throw new SecurityException("Somente administradores podem cadastrar eventos.");
+//        }
         adicionarEvento(evento);
+
     }
 
     /**
@@ -84,10 +100,14 @@ public class Evento {
         boolean contemEvento = eventosCadastrados.contains(evento);
         if (!contemEvento) {
             eventosCadastrados.add(evento);
+            System.out.println("Entrou dentro de adicionar evento" + eventosCadastrados);
+            persistenciaEventos.salvarDados(eventosCadastrados);
         } else {
             throw new CadastroException("Evento já cadastrado.");
         }
     }
+
+
 
     /**
      * Adiciona assento à lista de assentos disponíveis.
@@ -102,6 +122,28 @@ public class Evento {
         } else {
             throw new CadastroException("Assento já adicionado.");
         }
+    }
+
+    public void gerarAssentos(int quantidade) {
+
+
+        assentosDisponiveis.clear(); // Limpa qualquer dado anterior
+
+        // Define o número máximo de colunas (exemplo: 10)
+        int colunasPorLinha = 25;
+        int totalLinhas = (int) Math.ceil((double) quantidade / colunasPorLinha);
+
+        // Geração dos assentos alternando entre linhas A, B, C...
+        for (int linha = 0; linha < totalLinhas; linha++) {
+            char letraLinha = (char) ('A' + linha); // Converte índice para letra (A, B, C...)
+            for (int coluna = 1; coluna <= colunasPorLinha; coluna++) {
+                int numeroAssento = linha * colunasPorLinha + coluna; // Gera o número do assento
+                if (numeroAssento > quantidade) break; // Para ao atingir a quantidade de assentos
+                assentosDisponiveis.add(letraLinha + String.valueOf(coluna)); // Exemplo: A1, B2, C3
+
+            }
+        }
+        System.out.println("Entrou dentro de gerar assentos");
     }
 
     /**
@@ -299,6 +341,10 @@ public class Evento {
         eventosCadastrados.clear();
     }
 
+    @Override
+    public String toString() {
+        return nome + " - " + descricao + " - " + data;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -371,5 +417,13 @@ public class Evento {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public static void setEventosCadastrados(List<Evento> eventosCadastrados) {
+        Evento.eventosCadastrados = eventosCadastrados;
+    }
+
+    public void setAssentosDisponiveis(List<String> assentosDisponiveis) {
+        this.assentosDisponiveis = assentosDisponiveis;
     }
 }

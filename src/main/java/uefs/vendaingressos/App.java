@@ -2,32 +2,31 @@ package uefs.vendaingressos;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import uefs.vendaingressos.model.Evento;
 import uefs.vendaingressos.model.Usuario;
+import uefs.vendaingressos.model.persistencia.PersistenciaEventos;
 import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class App extends Application {
 
-//    @Override
-//    public void start(Stage stage) throws Exception {
-//        FXMLLoader fxmlLoader = new FXMLLoader(TelaLoginController.class.getResource("telaLogin.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 652, 400);
-//        stage.setTitle("Login");
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-
-    PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios("usuarios.json");
-
     private static Stage mainStage; // Referência ao Stage principal
+
+    private PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios("usuarios.json");
+    private PersistenciaEventos persistenciaEventos  = new PersistenciaEventos("detalhes-do-evento.json");
 
     @Override
     public void start(Stage stage) throws Exception {
         Usuario.setUsuariosCadastrados(persistenciaUsuarios.carregarDados());
+        Evento.setEventosCadastrados(persistenciaEventos.carregarDados());
+
         mainStage = stage; // Inicializa a referência ao Stage principal
         abrirTela("telaLogin.fxml", "Login"); // Define a tela inicial
     }
@@ -55,5 +54,4 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args); // Inicia o JavaFX
     }
-
 }

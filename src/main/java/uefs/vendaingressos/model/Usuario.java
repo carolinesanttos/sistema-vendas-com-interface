@@ -14,6 +14,7 @@
 package uefs.vendaingressos.model;
 
 import com.google.gson.annotations.Expose;
+import uefs.vendaingressos.model.excecoes.CadastroException;
 import uefs.vendaingressos.model.excecoes.FormaDePagamentoInvalidaException;
 import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
 import uefs.vendaingressos.model.excecoes.ReembolsoException;
@@ -52,6 +53,8 @@ public class Usuario {
     private boolean isLogado;
     @Expose
     private Compra compra;
+
+    Evento evento;
     @Expose
     private static List<Usuario> usuariosCadastrados = new ArrayList<>();
     @Expose
@@ -80,6 +83,12 @@ public class Usuario {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
+        this.isLogado = true;
+        if (login.equals("admin") && senha.equals("senha123")) {
+            this.adm = true;
+        } else {
+            this.adm = false;
+        }
     }
 
     /**
@@ -88,10 +97,11 @@ public class Usuario {
      * @param usuario será o usuário a ser cadastrado.
      */
     public void cadastroDeUsuarios (Usuario usuario) {
-
-        // Adicionar o novo usuário à lista existente
+        if (usuariosCadastrados.contains(usuario)) {
+            throw new CadastroException("Usuário já cadastrado!");
+        }
+        // Adicionar o novo usuário à lista
         usuariosCadastrados.add(usuario);
-
         // Salvar a lista atualizada
         persistenciaUsuarios.salvarDados(usuariosCadastrados);
 

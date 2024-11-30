@@ -21,30 +21,36 @@
                </children>
             </AnchorPane>
             <Button fx:id="botaoVoltar" layoutX="30.0" layoutY="47.0" mnemonicParsing="false" onAction="#abrirPaineldoAdmin" prefHeight="8.0" prefWidth="95.0" text="VOLTAR" />
-            <TextField fx:id="campoNome" layoutX="55.0" layoutY="149.0" prefHeight="25.0" prefWidth="490.0" promptText="Nome do evento" />
-            <TextField fx:id="campoDescricao" layoutX="55.0" layoutY="202.0" prefHeight="25.0" prefWidth="490.0" promptText="Descrição do evento" />
-            <Label layoutX="206.0" layoutY="89.0" text="CADASTRAR EVENTO">
+            <TextField fx:id="campoNome" layoutX="55.0" layoutY="132.0" prefHeight="25.0" prefWidth="490.0" promptText="Nome do evento" />
+            <TextField fx:id="campoDescricao" layoutX="55.0" layoutY="185.0" prefHeight="25.0" prefWidth="490.0" promptText="Descrição do evento" />
+            <Label layoutX="206.0" layoutY="72.0" text="CADASTRAR EVENTO">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <DatePicker fx:id="campoData" layoutX="55.0" layoutY="257.0" promptText="Data" />
-            <Label layoutX="55.0" layoutY="119.0" prefHeight="30.0" prefWidth="45.0" text="Nome">
+            <DatePicker fx:id="campoData" layoutX="55.0" layoutY="240.0" promptText="Data" />
+            <Label layoutX="55.0" layoutY="102.0" prefHeight="30.0" prefWidth="45.0" text="Nome">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label layoutX="55.0" layoutY="227.0" prefHeight="30.0" prefWidth="45.0" text="Data">
+            <Label layoutX="55.0" layoutY="210.0" prefHeight="30.0" prefWidth="45.0" text="Data">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label layoutX="55.0" layoutY="174.0" prefHeight="30.0" prefWidth="59.0" text="Descrição">
+            <Label layoutX="55.0" layoutY="157.0" prefHeight="30.0" prefWidth="59.0" text="Descrição">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Button fx:id="botaoFazerCadastro" layoutX="444.0" layoutY="300.0" mnemonicParsing="false" onAction="#fazerCadastro" prefHeight="8.0" prefWidth="95.0" text="SALVAR" />
+            <Button fx:id="botaoSalvarEvento" layoutX="450.0" layoutY="341.0" mnemonicParsing="false" onAction="#fazerCadastro" prefHeight="8.0" prefWidth="95.0" text="SALVAR" />
+            <TextField fx:id="campoQuantidadeAssentos" layoutX="55.0" layoutY="296.0" prefHeight="19.0" prefWidth="490.0" promptText="Quantidade de assentos" />
+            <Label layoutX="55.0" layoutY="276.0" prefHeight="19.0" prefWidth="150.0" text="Quantidade de assentos">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

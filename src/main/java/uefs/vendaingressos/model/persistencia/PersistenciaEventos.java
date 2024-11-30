@@ -13,6 +13,7 @@
 
 package uefs.vendaingressos.model.persistencia;
 
+import com.google.gson.GsonBuilder;
 import uefs.vendaingressos.model.Evento;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,11 +44,12 @@ public class PersistenciaEventos{
      * @throws RuntimeException Se ocorrer algum erro ao escrever os dados no arquivo.
      */
     public void salvarDados(List<Evento> eventosAtivos) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         FileWriter writer = null;
         try {
             writer = new FileWriter(caminhoArquivo);
             gson.toJson(eventosAtivos, writer);
+            System.out.println("Chegou aqui " + eventosAtivos.get(0).getNome() + " eventos");
         } catch (IOException e) {
             throw new RuntimeException("Não foi possível salvar os dados em " + caminhoArquivo + ": " + e.getMessage());
         } finally {
@@ -68,7 +70,7 @@ public class PersistenciaEventos{
      * @throws RuntimeException Se ocorrer algum erro ao ler os dados do arquivo.
      */
     public List<Evento> carregarDados() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         FileReader reader = null; // Inicializa o leitor como nulo
         try {
             // Tenta abrir o arquivo para leitura
