@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import uefs.vendaingressos.model.Usuario;
 import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
+import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class TelaLoginController {
         if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo) {
             System.out.println("Fez o login com sucesso.");
             // Login válido - Redireciona para TelaCadastroEvento
-            App.abrirTela("telaCadastroEvento.fxml", "Cadastro de Eventos");
+            App.abrirTela("telaPaineldoAdmin.fxml", "Painel do administrador");
         } else {
             exibirMensagemdeErro( "Erro ao fazer login","Usuário ou senha incorretos.\nTente novamente.");
         }
@@ -103,11 +104,10 @@ public class TelaLoginController {
             exibirMensagemdeErro( "Erro ao fazer cadastro","É necessário preencher todos os campos.");
         } else if (usuarioCadastrado) {
             exibirMensagemdeErro( "Erro ao fazer cadastro","Já existe um cadastro com este e-mail ou login.");
-        } else {
-            usuario.cadastroDeUsuarios(new Usuario(login, senha, nome, cpf, email));
-            System.out.println("Fez cadastro com sucesso.");
-            abrirTelaLogin();
         }
+        usuario.cadastroDeUsuarios(new Usuario(login, senha, nome, cpf, email));
+        abrirTelaLogin();
+
     }
 
 //    @FXML

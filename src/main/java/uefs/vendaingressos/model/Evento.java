@@ -56,6 +56,10 @@ public class Evento {
         this.status = true;
     }
 
+    public Evento() {
+
+    }
+
     /**
      * Cadastra evento no sistema
      * Somente usuários administradores podem cadastrar.

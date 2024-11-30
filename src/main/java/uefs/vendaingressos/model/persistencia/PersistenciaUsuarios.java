@@ -13,6 +13,7 @@
 
 package uefs.vendaingressos.model.persistencia;
 
+import com.google.gson.GsonBuilder;
 import uefs.vendaingressos.model.Usuario;
 import com.google.gson.Gson;
 
@@ -40,7 +41,7 @@ public class PersistenciaUsuarios {
      * @throws RuntimeException Se ocorrer algum erro ao escrever os dados no arquivo.
      */
     public void salvarDados(List<Usuario> usuarios) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         FileWriter writer = null;
         try {
             // Tenta abrir o arquivo para escrita
@@ -69,7 +70,7 @@ public class PersistenciaUsuarios {
      * @throws RuntimeException Se ocorrer algum erro ao ler os dados do arquivo.
      */
     public List<Usuario> carregarDados() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         FileReader reader = null;
         try {
             // Tenta abrir o arquivo para leitura
