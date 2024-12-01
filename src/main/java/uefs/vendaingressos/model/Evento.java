@@ -343,7 +343,7 @@ public class Evento {
 
     @Override
     public String toString() {
-        return nome + " - " + descricao + " - " + data;
+        return nome + " - " + descricao + " - " + data + " - " + ;
     }
 
     @Override

@@ -24,7 +24,6 @@
          </font>
       </Label>
       <Button fx:id="botaoVoltar" layoutX="470.0" layoutY="368.0" mnemonicParsing="false" onAction="#abrirPaineldoAdmin" prefHeight="8.0" prefWidth="95.0" text="VOLTAR" />
-      <Button fx:id="botaoRemover" layoutX="470.0" layoutY="54.0" mnemonicParsing="false" onAction="#removerEvento" prefHeight="8.0" prefWidth="95.0" text="REMOVER" />
-      <Button fx:id="botaoEditar" layoutX="364.0" layoutY="54.0" mnemonicParsing="false" onAction="#editarEvento" prefHeight="8.0" prefWidth="95.0" text="EDITAR" />
+      <Button fx:id="botaoModificar" layoutX="470.0" layoutY="54.0" mnemonicParsing="false" onAction="#acaoEventoSelecionado" prefHeight="8.0" prefWidth="95.0" text="MODIFICAR" />
    </children>
 </AnchorPane>
