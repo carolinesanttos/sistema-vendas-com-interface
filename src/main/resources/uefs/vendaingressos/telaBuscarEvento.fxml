@@ -31,7 +31,7 @@
       </Label>
       <TextField fx:id="campoNomeNovo" layoutX="20.0" layoutY="93.0" promptText="Novo evento" />
       <TextField fx:id="campoDescricao" layoutX="20.0" layoutY="93.0" promptText="Nova descrição" />
-      <DatePicker fx:id="campoData" promptText="DD-MM-AAAA" />
+      <DatePicker fx:id="campoData" promptText="Nova data" />
       <TextField fx:id="campoQuantidadeAssentos" promptText="Nova quantidade de assentos" />
       <TextField fx:id="campoValor" layoutX="20.0" layoutY="309.0" promptText="Novo valor do ingresso" />
       <HBox alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="440.0" spacing="10.0">

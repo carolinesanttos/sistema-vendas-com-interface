@@ -6,16 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import uefs.vendaingressos.model.Evento;
+import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
 import uefs.vendaingressos.model.persistencia.PersistenciaEventos;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class TelaPaineldoAdmin implements Initializable {
 
@@ -26,7 +27,7 @@ public class TelaPaineldoAdmin implements Initializable {
     private Button botaoCancelar;
 
     @FXML
-    private TextField campoNome;
+    private TextField campoNome, campoNomeNovo;
 
     @FXML
     private TextField campoDescricao;
@@ -56,9 +57,17 @@ public class TelaPaineldoAdmin implements Initializable {
     private Button botaoSalvarEdicao;
 
     @FXML
+    private Label labelDetalhesEvento;
+
+    @FXML
+    private Button botaoBuscar;
+
+    @FXML
     private ListView<Evento> listViewEventos = new ListView<>();
 
     private Evento evento = new Evento();
+    private Evento eventoSelecionado = new Evento();
+    private Evento eventoEncontrado = new Evento();
 
     PersistenciaEventos persistenciaEventos = new PersistenciaEventos("detalhes-do-evento.json");
 
@@ -82,20 +91,28 @@ public class TelaPaineldoAdmin implements Initializable {
 
         if (nome.isEmpty() || descricao.isEmpty() || campoQuantidadeAssentos.getText().isEmpty() || campoData.getValue() == null || campoValor.getText().isEmpty()) {
             exibirMensagemdeErro("Erro ao fazer cadastro", "É necessário preencher todos os campos.");
+        } else {
+            try {
+                int quantidadeAssentos = Integer.parseInt(campoQuantidadeAssentos.getText());
+            } catch (NumberFormatException e) {
+                exibirMensagemdeErro("Erro ao fazer cadastro", "A quantidade de assentos deve ser um número válido.");
+                return;
+            }
         }
         // Convertendo de LocalDate para Date
         Date dataConvertida = Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        evento.cadastroDeEventos(new Evento(nome, descricao, dataConvertida));
+
+        Evento novoEvento = new Evento(nome, descricao, dataConvertida, valor);
 
         // Adicionando assentos
-        evento.gerarAssentos(qntdAssentos);
+        novoEvento.gerarAssentos(qntdAssentos);
+
+        evento.cadastroDeEventos(novoEvento);
+
+        // Persistindo os dados, incluindo assentos
+        persistenciaEventos.salvarDados(evento.getEventosCadastrados());
 
         abrirPaineldoAdmin(event);
-    }
-
-    @FXML
-    public void abrirListarEventos(ActionEvent event) {
-        App.abrirTela("telaListarEventosAdmin.fxml", "Lista de eventos");
     }
 
     public void carregarEventos () {
@@ -113,7 +130,7 @@ public class TelaPaineldoAdmin implements Initializable {
     @FXML
     public void acaoEventoSelecionado(ActionEvent event) {
         // Obter o evento selecionado na ListView
-        Evento eventoSelecionado = listViewEventos.getSelectionModel().getSelectedItem();
+        eventoSelecionado = listViewEventos.getSelectionModel().getSelectedItem();
 
         if (eventoSelecionado != null) {
             // Criar a caixa de diálogo de confirmação
@@ -132,10 +149,12 @@ public class TelaPaineldoAdmin implements Initializable {
 
             // Mostrar a caixa de diálogo e aguardar resposta
             Optional<ButtonType> resultado = dialogo.showAndWait();
+
             if (resultado.isPresent()) {
                 if (resultado.get() == editar) {
                     // Chamar o método para abrir o formulário de edição
-                    abrirCaixaEdicao(eventoSelecionado);
+                    App.abrirTela("telaEditarEvento.fxml", "Buscar evento");
+
                 } else if (resultado.get() == remover) {
                     // Confirmar a remoção do evento
                     boolean confirmado = confirmarRemocao(eventoSelecionado);
@@ -148,38 +167,72 @@ public class TelaPaineldoAdmin implements Initializable {
         } else {
             // Nenhum evento foi selecionado
             exibirMensagemdeErro("Aviso: nenhum evento selecionado", "Por favor, selecione um evento na lista para realizar uma ação.");
-//            Alert alerta = new Alert(Alert.AlertType.WARNING);
-//            alerta.setTitle("Aviso");
-//            alerta.setHeaderText("Nenhum evento selecionado");
-//            alerta.setContentText("Por favor, selecione um evento na lista para realizar uma ação.");
-//            alerta.showAndWait();
         }
     }
 
-    // Método para abrir o formulário de edição
-    public void abrirCaixaEdicao(Evento eventoSelecionado) {
-        App.abrirTela("telaEditarEvento.fxml", "Editar evento selecionado");
+    @FXML
+    public void buscarPorEvento(ActionEvent event) {
+        String nomeBuscado = campoNome.getText();
+        System.out.println(nomeBuscado);
+        try {
+            Evento eventoEncontrado = evento.buscarEventoPorNome(nomeBuscado);
+
+            if (eventoEncontrado != null) {
+                labelDetalhesEvento.setText("Evento " + eventoEncontrado.getNome() + ", preencha os campos abaixo.");
+                preencherCamposComDadosEvento(eventoEncontrado);
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            labelDetalhesEvento.setText("Evento não encontrado.");
+        }
     }
 
     @FXML
-    public void editarEvento(ActionEvent event) {
-        String nome = campoNome.getText();
+    public void salvarEdicaodeEvento() {
+        // Valida se todos os campos estão preenchidos antes de processar os dados
+        if (campoNome.getText().isEmpty() || campoDescricao.getText().isEmpty() || campoData.getValue() == null || campoQuantidadeAssentos.getText().isEmpty() || campoValor.getText().isEmpty()) {
+            exibirMensagemdeErro("Erro ao fazer cadastro", "É necessário preencher todos os campos.");
+            return; // Interrompe o método se os campos estiverem vazios
+        }
+
+        // Caso os campos estejam preenchidos, prossegue com a edição
+        String nome = campoNomeNovo.getText();
         String descricao = campoDescricao.getText();
         LocalDate data = campoData.getValue();
         int qntdAssentos = Integer.parseInt(campoQuantidadeAssentos.getText());
         double valor = Double.parseDouble(campoValor.getText());
 
-        if (nome.isEmpty() || descricao.isEmpty() || campoQuantidadeAssentos.getText().isEmpty() || campoData.getValue() == null || campoValor.getText().isEmpty()) {
-            exibirMensagemdeErro("Erro ao fazer edição", "É necessário preencher todos os campos.");
+        // Atualiza os dados do evento encontrado
+        eventoEncontrado.setNome(nome);
+        eventoEncontrado.setDescricao(descricao);
+        eventoEncontrado.setData(Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        eventoEncontrado.gerarAssentos(qntdAssentos);
+        eventoEncontrado.setValor(valor);
+
+        System.out.println(evento.getValor());
+
+        List<Evento> eventosAtivos = persistenciaEventos.carregarDados();
+
+        // Atualiza o evento na lista
+        for (int i = 0; i < eventosAtivos.size(); i++) {
+            if (eventosAtivos.get(i).getNome().equals(eventoEncontrado.getNome())) {
+                eventosAtivos.set(i, eventoEncontrado);
+                break;
+            }
         }
-        // Convertendo de LocalDate para Date
-        Date dataConvertida = Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        evento.cadastroDeEventos(new Evento(nome, descricao, dataConvertida));
 
-        // Adicionando assentos
-        evento.gerarAssentos(qntdAssentos);
+        // Salva a lista de eventos atualizada no arquivo
+        persistenciaEventos.salvarDados(eventosAtivos);
 
-        abrirPaineldoAdmin(event);
+        App.abrirTela("telaListarEventosAdmin.fxml", "Lista de eventos");
+    }
+
+    public void preencherCamposComDadosEvento(Evento eventoEncontrado) {
+        campoNomeNovo.setText(eventoEncontrado.getNome());
+        campoDescricao.setText(eventoEncontrado.getDescricao());
+        campoData.setValue(eventoEncontrado.getData().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        campoQuantidadeAssentos.setText(String.valueOf(eventoEncontrado.getQuantidadeAssentos()));
+        campoValor.setText(String.valueOf(eventoEncontrado.getValor()));
     }
 
     // Método para confirmar a remoção do evento
@@ -216,6 +269,11 @@ public class TelaPaineldoAdmin implements Initializable {
             exibirMensagemdeErro("Aviso", "Nenhum evento selecionado para remover.");
 
         }
+    }
+
+    @FXML
+    public void abrirListarEventos(ActionEvent event) {
+        App.abrirTela("telaListarEventosAdmin.fxml", "Lista de eventos");
     }
 
     @FXML

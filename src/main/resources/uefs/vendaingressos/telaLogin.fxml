@@ -36,14 +36,22 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaLoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaLoginController">
    <right>
-      <AnchorPane prefHeight="400.0" prefWidth="298.0" style="-fx-background-color: #827fe3;" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="400.0" prefWidth="298.0" style="-fx-background-color: #827fe3;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="301.0" fitWidth="298.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@logo-removebg-preview.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
    </right>
    <left>
       <AnchorPane prefHeight="400.0" prefWidth="299.0" BorderPane.alignment="CENTER">

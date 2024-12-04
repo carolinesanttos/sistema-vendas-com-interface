@@ -20,6 +20,7 @@ import uefs.vendaingressos.model.Usuario;
 import uefs.vendaingressos.model.Feedback;
 import uefs.vendaingressos.model.persistencia.PersistenciaEventos;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -36,9 +37,13 @@ public class Evento {
     @Expose
     private Date data;
     @Expose
+    private double valor;
+    @Expose
     private boolean status;
     @Expose
     private Usuario usuario;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     @Expose
     private static List<Evento> eventosCadastrados = new ArrayList<>();
     @Expose
@@ -51,7 +56,6 @@ public class Evento {
     private List<Ingresso> ingressosComprados = new ArrayList<>();
     @Expose
     private List<Feedback> feedbacks = new ArrayList<>();
-    @Expose
     private PersistenciaEventos persistenciaEventos  = new PersistenciaEventos("detalhes-do-evento.json");
 
 
@@ -60,7 +64,6 @@ public class Evento {
         this.descricao = descricao;
         this.data = data;
         this.status = true;
-
     }
 
     public Evento(Usuario usuario, String nome, String descricao, Date data) {
@@ -69,6 +72,14 @@ public class Evento {
         this.descricao = descricao;
         this.data = data;
         this.status = true;
+    }
+
+    public Evento(String nome, String descricao, Date data, double valor) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.data = data;
+        this.status = true;
+        this.valor = valor;
     }
 
     public Evento() {
@@ -100,8 +111,7 @@ public class Evento {
         boolean contemEvento = eventosCadastrados.contains(evento);
         if (!contemEvento) {
             eventosCadastrados.add(evento);
-            System.out.println("Entrou dentro de adicionar evento" + eventosCadastrados);
-            persistenciaEventos.salvarDados(eventosCadastrados);
+            //persistenciaEventos.salvarDados(eventosCadastrados);
         } else {
             throw new CadastroException("Evento já cadastrado.");
         }
@@ -125,8 +135,6 @@ public class Evento {
     }
 
     public void gerarAssentos(int quantidade) {
-
-
         assentosDisponiveis.clear(); // Limpa qualquer dado anterior
 
         // Define o número máximo de colunas (exemplo: 10)
@@ -138,12 +146,13 @@ public class Evento {
             char letraLinha = (char) ('A' + linha); // Converte índice para letra (A, B, C...)
             for (int coluna = 1; coluna <= colunasPorLinha; coluna++) {
                 int numeroAssento = linha * colunasPorLinha + coluna; // Gera o número do assento
-                if (numeroAssento > quantidade) break; // Para ao atingir a quantidade de assentos
+                if (numeroAssento > quantidade) {
+                    break;
+                } // Para ao atingir a quantidade de assentos
                 assentosDisponiveis.add(letraLinha + String.valueOf(coluna)); // Exemplo: A1, B2, C3
-
             }
         }
-        System.out.println("Entrou dentro de gerar assentos");
+        //persistenciaEventos.salvarDados(eventosCadastrados);
     }
 
     /**
@@ -236,6 +245,7 @@ public class Evento {
      */
     public Evento buscarEventoPorNome(String name) {
         for (Evento evento : getEventosCadastrados()) {
+            System.out.println(evento.nome);
             if (evento.getNome().equalsIgnoreCase(name)) {
                 return evento;
             }
@@ -343,7 +353,8 @@ public class Evento {
 
     @Override
     public String toString() {
-        return nome + " - " + descricao + " - " + data + " - " + ;
+        String dataFormatada = sdf.format(data);
+        return nome + " - " + descricao + " - " + dataFormatada + " - R$ " + valor;
     }
 
     @Override
@@ -425,5 +436,21 @@ public class Evento {
 
     public void setAssentosDisponiveis(List<String> assentosDisponiveis) {
         this.assentosDisponiveis = assentosDisponiveis;
+    }
+
+    public void adicionarAssentos (String assento) {
+        assentosDisponiveis.add(assento);
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double novoValor) {
+        this.valor = valor;
+    }
+
+    public int getQuantidadeAssentos() {
+        return assentosDisponiveis.size();
     }
 }
