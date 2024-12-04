@@ -15,4 +15,7 @@ module uefs.sistemavendas3 {
 
     opens uefs.vendaingressos to javafx.fxml;
     exports uefs.vendaingressos;
+    opens uefs.vendaingressos.model to com.google.gson;
+
+
 }

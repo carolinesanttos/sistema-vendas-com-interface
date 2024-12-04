@@ -13,9 +13,12 @@
 
 package uefs.vendaingressos.model;
 
+import com.google.gson.annotations.Expose;
+import uefs.vendaingressos.model.excecoes.CadastroException;
 import uefs.vendaingressos.model.excecoes.FormaDePagamentoInvalidaException;
 import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
 import uefs.vendaingressos.model.excecoes.ReembolsoException;
+import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
 import java.util.*;
 import java.util.List;
@@ -34,17 +37,32 @@ import java.util.List;
  * formas de pagamento inválidas ou cancelar ingressos já reembolsados.
  */
 public class Usuario {
+    @Expose
     private String login;
+    @Expose
     private String senha;
+    @Expose
     private String nome;
+    @Expose
     private String cpf;
+    @Expose
     private String email;
+    @Expose
     private boolean adm;
+    @Expose
     private boolean isLogado;
+    @Expose
     private Compra compra;
+
+    Evento evento;
+    @Expose
     private static List<Usuario> usuariosCadastrados = new ArrayList<>();
+    @Expose
     private List<Pagamento> formasDePagamento = new ArrayList<>();
+    @Expose
     private List <Compra> ingressosComprados = new ArrayList<>();
+    @Expose
+    private PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios("usuarios.json");
 
     public Usuario () {
     }
@@ -65,6 +83,12 @@ public class Usuario {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
+        this.isLogado = true;
+        if (login.equals("admin") && senha.equals("senha123")) {
+            this.adm = true;
+        } else {
+            this.adm = false;
+        }
     }
 
     /**
@@ -73,7 +97,14 @@ public class Usuario {
      * @param usuario será o usuário a ser cadastrado.
      */
     public void cadastroDeUsuarios (Usuario usuario) {
+        if (usuariosCadastrados.contains(usuario)) {
+            throw new CadastroException("Usuário já cadastrado!");
+        }
+        // Adicionar o novo usuário à lista
         usuariosCadastrados.add(usuario);
+        // Salvar a lista atualizada
+        persistenciaUsuarios.salvarDados(usuariosCadastrados);
+
     }
 
     /**
@@ -333,6 +364,10 @@ public class Usuario {
 
     public void setLogado(boolean logado) {
         isLogado = logado;
+    }
+
+    public static void setUsuariosCadastrados(List<Usuario> usuariosCadastrados) {
+        Usuario.usuariosCadastrados = usuariosCadastrados;
     }
 }
 

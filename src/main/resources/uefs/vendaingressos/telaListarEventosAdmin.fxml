@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaPaineldoAdmin">
+   <children>
+      <ListView fx:id="listViewEventos" layoutX="36.0" layoutY="88.0" prefHeight="270.0" prefWidth="529.0" />
+      <AnchorPane fx:id="pane1" prefHeight="30.0" prefWidth="600.0" style="-fx-background-color: #535353;">
+         <children>
+            <Label layoutX="408.0" layoutY="6.0" text="PAINEL DO ADMINISTRADOR" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label layoutX="36.0" layoutY="46.0" prefHeight="40.0" prefWidth="241.0" text="EVENTOS CADASTRADOS">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="botaoVoltar" layoutX="470.0" layoutY="368.0" mnemonicParsing="false" onAction="#abrirPaineldoAdmin" prefHeight="8.0" prefWidth="95.0" text="VOLTAR" />
+      <Button fx:id="botaoModificar" layoutX="470.0" layoutY="54.0" mnemonicParsing="false" onAction="#acaoEventoSelecionado" prefHeight="8.0" prefWidth="95.0" text="MODIFICAR" />
+   </children>
+</AnchorPane>

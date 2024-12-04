@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import uefs.vendaingressos.model.Usuario;
 import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
+import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,12 +35,8 @@ public class TelaLoginController {
     @FXML
     private TextField campoSenha;
 
-//    @FXML
-//    private Button botaoCriaConta;
-
     @FXML
     private Hyperlink botaoVoltar;
-
 
     @FXML
     private TextField campoCpf;
@@ -60,8 +57,12 @@ public class TelaLoginController {
         boolean usuarioAtivo = usuario.validarLogin(user, senha);
 
         if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo) {
-            System.out.println("Fez o login com sucesso.");
-            //abrirTelaEvento();
+            if (user.equals("admin") && senha.equals("senha123")) {
+                // Login válido - Redireciona para TelaCadastroEvento
+                App.abrirTela("telaPaineldoAdmin.fxml", "Painel do administrador");
+            } else {
+                System.out.println("Abrindo tela do cliente");
+            }
         } else {
             exibirMensagemdeErro( "Erro ao fazer login","Usuário ou senha incorretos.\nTente novamente.");
         }
@@ -69,17 +70,7 @@ public class TelaLoginController {
 
     @FXML
     public void abrirTelaCadastro(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaCadastro.fxml"));
-            Parent telaCadastro = loader.load();
-
-            Stage stage = (Stage) botaoIrCriarConta.getScene().getWindow();
-            stage.setScene(new Scene(telaCadastro));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            exibirMensagemdeErro("Erro", "Não foi possível abrir a tela de cadastro.");
-        }
+        App.abrirTela("telaCadastro.fxml", "Cadastro");
     }
 
     @FXML
@@ -97,27 +88,17 @@ public class TelaLoginController {
             exibirMensagemdeErro( "Erro ao fazer cadastro","É necessário preencher todos os campos.");
         } else if (usuarioCadastrado) {
             exibirMensagemdeErro( "Erro ao fazer cadastro","Já existe um cadastro com este e-mail ou login.");
-        } else {
-            usuario.cadastroDeUsuarios(new Usuario(login, senha, nome, cpf, email));
-            System.out.println("Fez cadastro com sucesso.");
-            abrirTelaLogin();
         }
+        usuario.cadastroDeUsuarios(new Usuario(login, senha, nome, cpf, email));
+        abrirTelaLogin();
+
     }
 
     @FXML
     void abrirTelaLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("telaLogin.fxml"));
-            Parent telaLogin = loader.load();
-
-            Stage stage = (Stage) botaoVoltar.getScene().getWindow();
-            stage.setScene(new Scene(telaLogin));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            exibirMensagemdeErro("Erro", "Não foi possível voltar para tela de login.");
-        }
+        App.abrirTela("telaLogin.fxml", "Login");
     }
+
 
     @FXML
     void alterarSenha(ActionEvent event) {
@@ -130,26 +111,5 @@ public class TelaLoginController {
         alerta.setContentText(mensagemErro);  // Define a mensagem do alerta
         alerta.showAndWait();  // Mostra o alerta e espera o usuário fechar
     }
-
-
-
-//    public void abrirTelaEvento(String arquivoFxml) {
-//        try {
-//            // Carrega o arquivo da próxima tela (certifique-se que o nome está correto)
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(arquivoFxml));
-//            Parent proximaCena = loader.load();
-//
-//            // Pega a janela atual e troca a cena para a nova tela
-//            Stage stage = (Stage) botaoLogin.getScene().getWindow();
-//            stage.setScene(new Scene(proximaCena));  // Define a nova cena
-//            stage.show();
-//        } catch (NullPointerException e) {
-//            e.printStackTrace();  // Imprime o erro se algo der errado
-//            exibirMensagemdeErro("Erro", "Insira seus dados para continuar.");
-//        } catch (IOException e) {
-//            e.printStackTrace();  // Imprime o erro se algo der errado
-//            exibirMensagemdeErro("Erro", "Não foi possível abrir a próxima tela.");
-//        }
-//    }
 
 }
