@@ -61,7 +61,7 @@ public class TelaLoginController {
                 // Login válido - Redireciona para TelaCadastroEvento
                 App.abrirTela("telaPaineldoAdmin.fxml", "Painel do administrador");
             } else {
-                System.out.println("Abrindo tela do cliente");
+                App.abrirTela("telaHomeEventos.fxml", "Painel de eventos");
             }
         } else {
             exibirMensagemdeErro( "Erro ao fazer login","Usuário ou senha incorretos.\nTente novamente.");
