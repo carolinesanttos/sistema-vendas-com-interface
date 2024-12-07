@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import uefs.vendaingressos.model.Evento;
 import uefs.vendaingressos.model.Usuario;
@@ -42,6 +43,24 @@ public class App extends Application {
             e.printStackTrace();
             exibirMensagemErro("Erro", "Não foi possível carregar a tela " + arquivoFxml);
         }
+    }
+
+    public static void exibirMensagemInfo(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+
+        alert.showAndWait();
+    }
+
+    public static String exibirDialogoTexto(String titulo, String mensagem) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(titulo);
+        dialog.setHeaderText(null);
+        dialog.setContentText(mensagem);
+
+        return dialog.showAndWait().orElse(null);
     }
 
     public static void exibirMensagemErro(String titulo, String mensagemErro) {

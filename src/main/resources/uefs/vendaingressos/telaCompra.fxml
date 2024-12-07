@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="containerCompra" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaCompraController" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 20;">
+    <Label fx:id="lblTutorial" style="-fx-font-size: 14; -fx-font-weight: bold;" wrapText="true" />
+    <!-- Informações do evento (adicionadas dinamicamente) -->
+    <children>
+        <ComboBox fx:id="comboTiposIngressos" promptText="Selecione o tipo de ingresso" />
+
+        <Label text="Assentos Disponíveis" />
+        <ListView fx:id="listAssentosDisponiveis" />
+
+        <Label text="Formas de Pagamento" />
+        <ComboBox fx:id="comboFormasPagamento" promptText="Selecione uma forma de pagamento" />
+
+        <Button fx:id="btnConfirmarAssento" text="Confirmar Assento" />
+        <Button fx:id="btnAdicionarPagamento" text="Adicionar Forma de Pagamento" />
+        <Button fx:id="btnFinalizarCompra" text="Finalizar Compra" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+        <Button fx:id="btnCancelarCompra" text="Cancelar" style="-fx-background-color: #f44336; -fx-text-fill: white;" />
+    </children>
+
+</VBox>

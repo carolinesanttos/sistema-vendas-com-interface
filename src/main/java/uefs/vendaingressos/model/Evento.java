@@ -160,6 +160,23 @@ public class Evento {
      *
      * @param assento assento a ser removido.
      */
+
+    public boolean reservarAssento(String assento) {
+        if (assentosDisponiveis.contains(assento)) {
+            assentosDisponiveis.remove(assento);
+            assentosReservados.add(assento);
+            return true;
+        }
+        return false;
+    }
+
+    public void liberarAssento(String assento) {
+        if (assentosReservados.contains(assento)) {
+            assentosReservados.remove(assento);
+            assentosDisponiveis.add(assento);
+        }
+    }
+
     public void removerAssentoDisponivel(String assento)     {
         boolean contemAssento = assentosDisponiveis.contains(assento);
         if (contemAssento) {

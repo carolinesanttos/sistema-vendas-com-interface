@@ -141,6 +141,18 @@ public class Usuario {
         return false; // Usuário não encontrado
     }
 
+    public Usuario validarLogin2 (String login, String senha) {
+        for (Usuario usuario : usuariosCadastrados) {
+            if (usuario.getLogin().equals(login)) {
+                // Se o login estiver cadastrado, verifica a senha
+                if (usuario.getSenha().equals(senha)) {
+                    return usuario; // Usuário encontrado
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean validarCadastro(String login, String email) {
         for (Usuario usuario : usuariosCadastrados) {
             if (usuario.getLogin().equals(login) || usuario.getEmail().equals(email)) {

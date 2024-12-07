@@ -186,6 +186,10 @@ public class Compra {
         return valor;
     }
 
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
@@ -200,5 +204,9 @@ public class Compra {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 }

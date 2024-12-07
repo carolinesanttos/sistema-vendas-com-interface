@@ -54,14 +54,15 @@ public class TelaLoginController {
         String user = campoLogin.getText();
         String senha = campoSenha.getText();
 
-        boolean usuarioAtivo = usuario.validarLogin(user, senha);
+        Usuario usuarioAtivo = usuario.validarLogin2(user, senha);
 
-        if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo) {
+        if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo != null) {
             if (user.equals("admin") && senha.equals("senha123")) {
                 // Login válido - Redireciona para TelaCadastroEvento
                 App.abrirTela("telaPaineldoAdmin.fxml", "Painel do administrador");
             } else {
-                App.abrirTela("telaHomeEventos.fxml", "Painel de eventos");
+                UsuarioLogado.setUsuarioAtual(usuarioAtivo);
+                App.abrirTela("telaEventos.fxml", "Painel de eventos");
             }
         } else {
             exibirMensagemdeErro( "Erro ao fazer login","Usuário ou senha incorretos.\nTente novamente.");

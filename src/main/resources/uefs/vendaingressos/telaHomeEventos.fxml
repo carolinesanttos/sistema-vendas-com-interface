@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #827fe3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaHomeEventos">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #827fe3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaEventosController">
    <children>
-      <VBox fx:id="containerMenu" layoutY="43.0" prefHeight="357.0" prefWidth="85.0" style="-fx-background-color: #ffffff;" AnchorPane.rightAnchor="515.0">
+      <AnchorPane layoutX="-4.0" layoutY="43.0" prefHeight="357.0" prefWidth="606.0">
          <children>
-            <Button fx:id="botaoHome" mnemonicParsing="false" onAction="#alternaParaEventos" prefHeight="37.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" text="HOME" textAlignment="RIGHT" />
-            <Button fx:id="botaoPerfil" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#alternarParaPerfil" prefHeight="37.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" text="PERFIL" />
-            <Button fx:id="botaoSair" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#alternarParaSair" prefHeight="37.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" text="SAIR" />
-         </children>
-      </VBox>
-      <AnchorPane layoutX="83.0" layoutY="43.0" prefHeight="357.0" prefWidth="519.0">
-         <children>
-            <ScrollPane prefHeight="357.0" prefWidth="519.0">
+            <ScrollPane fx:id="scrollPane" layoutY="7.0" prefHeight="350.0" prefWidth="606.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="357.0" prefWidth="516.0">
+                <AnchorPane fx:id="scrollAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="351.0" prefWidth="602.0">
                      <children>
-                        <VBox fx:id="containerDeEvento" layoutX="40.0" layoutY="21.0" prefHeight="108.0" prefWidth="438.0" spacing="10.0">
-                           <children>
-                              <Label fx:id="labelNomeEvento" text="nome evento" />
-                              <Label fx:id="labelDescricaoEvento" text="descrição" />
-                              <Label fx:id="labelDataEvento" text="data" />
-                              <Button fx:id="botaoCompra" mnemonicParsing="false" onAction="#alternarParaCompra" text="COMPRAR" />
-                           </children>
-                        </VBox>
+                        <VBox fx:id="containerDeEvento" layoutX="26.0" layoutY="14.0" prefHeight="200.0" prefWidth="543.0" />
                      </children>
                   </AnchorPane>
               </content>
