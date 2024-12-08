@@ -10,8 +10,8 @@
 <?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaEventosController">
     <children>
-        <!-- Menu Hamburguer -->
-        <Button fx:id="menuButton" text="≡" style="-fx-font-size: 18; -fx-background-color: #ffffff;" layoutX="10" layoutY="10" onAction="#abrirMenu"/>
+        <!-- Botão Hamburguer -->
+        <Button fx:id="menuButton" text="≡" style="-fx-font-size: 18; -fx-background-color: #827fe3;" layoutX="10" layoutY="10" onAction="#abrirMenu"/>
 
         <!-- Lista de Eventos -->
         <ScrollPane layoutX="50" layoutY="50" prefWidth="500" prefHeight="300">
@@ -23,7 +23,32 @@
                 </VBox>
             </content>
         </ScrollPane>
+
+        <!-- Menu Lateral -->
+        <VBox fx:id="menuLateral" style="-fx-background-color: #333333; -fx-padding: 20;" prefWidth="200" alignment="TOP_CENTER" visible="false">
+            <children>
+                <Label text="Menu" style="-fx-text-fill: #ffffff; -fx-font-size: 18; -fx-font-weight: bold;" />
+                <Button text="Home" style="-fx-background-color: #827fe3; -fx-text-fill: #ffffff;" onAction="#exibirTelaEventos" />
+                <Button text="Perfil do Usuário" style="-fx-background-color: #827fe3; -fx-text-fill: #ffffff;" onAction="#exibirPerfilUsuario" />
+                <Button text="Sair" style="-fx-background-color: #ff4c4c; -fx-text-fill: #ffffff;" onAction="#abrirTelaLogin" />
+            </children>
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <!-- Ancorar o menu à esquerda e a altura 100% da tela -->
+            <AnchorPane.leftAnchor>
+                0
+            </AnchorPane.leftAnchor>
+            <AnchorPane.topAnchor>
+                0
+            </AnchorPane.topAnchor>
+            <AnchorPane.bottomAnchor>
+                0
+            </AnchorPane.bottomAnchor>
+        </VBox>
     </children>
 </AnchorPane>
+
+
 
 

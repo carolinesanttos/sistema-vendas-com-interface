@@ -53,7 +53,7 @@ public class Usuario {
     private boolean isLogado;
     @Expose
     private Compra compra;
-
+    @Expose
     Evento evento;
     @Expose
     private static List<Usuario> usuariosCadastrados = new ArrayList<>();
@@ -61,8 +61,8 @@ public class Usuario {
     private List<Pagamento> formasDePagamento = new ArrayList<>();
     @Expose
     private List <Compra> ingressosComprados = new ArrayList<>();
-    @Expose
-    private PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios("usuarios.json");
+
+    private static PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios("usuarios.json");
 
     public Usuario () {
     }
@@ -366,6 +366,10 @@ public class Usuario {
         return usuariosCadastrados;
     }
 
+    public List<Usuario> retornarUsuariosCadastrados() {
+        return usuariosCadastrados;
+    }
+
     public boolean isLogado() {
         return isLogado;
     }
@@ -380,6 +384,15 @@ public class Usuario {
 
     public static void setUsuariosCadastrados(List<Usuario> usuariosCadastrados) {
         Usuario.usuariosCadastrados = usuariosCadastrados;
+    }
+
+    public void setFormasDePagamento(List<Pagamento> formasDePagamento) {
+        this.formasDePagamento = formasDePagamento;
+        System.out.println("Dentro de setFormasDePagamento Usuario " + this.nome + " " + formasDePagamento);
+    }
+
+    public void setIngressosComprados(List<Compra> ingressosComprados) {
+        this.ingressosComprados = ingressosComprados;
     }
 }
 

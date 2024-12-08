@@ -15,6 +15,7 @@ package uefs.vendaingressos.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import uefs.vendaingressos.model.excecoes.*;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import java.util.Objects;
  * formas de pagamento inválidas.
  */
 public class Pagamento {
+    @Expose
     private String formaDePagamento;  // Cartão ou boleto
     private transient String nomeTitular;
     private transient String numeroDoCartao;
@@ -37,6 +39,7 @@ public class Pagamento {
     private transient String codigoDeSeguranca;
     private transient String codigoDeBarras;   // Para pagamento com boleto
     private boolean reembolso;
+    @Expose
     private Compra compra;
 
     // Forma de pagamento: Cartão

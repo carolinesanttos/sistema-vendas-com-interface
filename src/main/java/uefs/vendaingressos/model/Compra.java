@@ -16,6 +16,7 @@ package uefs.vendaingressos.model;
 import java.io.Writer;
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
 import uefs.vendaingressos.model.excecoes.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,10 +34,13 @@ import java.io.IOException;
  */
 public class Compra {
     private transient  Usuario usuario;
+    @Expose
     private Ingresso ingresso;
+    @Expose
     private Date data;
     private transient double valor;
     private String status; // "Pendente", "Aprovado", "Cancelado"
+    @Expose
     private Pagamento  pagamento;
 
     public Compra(Usuario usuario, Ingresso ingresso) {

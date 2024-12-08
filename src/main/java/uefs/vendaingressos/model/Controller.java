@@ -329,7 +329,7 @@ public class Controller {
      *
      * @return lista de usuários cadastrados.
      */
-    public List<Usuario> getUsuariosCadastrados() {
+    public static List<Usuario> getUsuariosCadastrados() {
         return Usuario.getUsuariosCadastrados();
     }
 

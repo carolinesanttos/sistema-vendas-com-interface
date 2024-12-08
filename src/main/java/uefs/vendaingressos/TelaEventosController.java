@@ -1,6 +1,7 @@
 package uefs.vendaingressos;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,6 +31,7 @@ public class TelaEventosController {
     @FXML
     private Button menuButton;
 
+    @FXML
     private VBox menuLateral; // Contêiner do menu
 
     private boolean menuAberto = false; // Estado do menu
@@ -41,9 +44,6 @@ public class TelaEventosController {
 
     @FXML
     public void initialize() {
-        // Inicializar menu lateral
-        menuLateral = criarMenu();
-
         // Carregar eventos da persistência
         eventos = persistenciaEventos.carregarDados();  // Método fictício para carregar eventos da persistência
 
@@ -94,9 +94,13 @@ public class TelaEventosController {
     @FXML
     public void abrirMenu() {
         if (!menuAberto) {
-            eventosContainer.getChildren().add(0, menuLateral);
+            // Exibe o menu lateral
+            menuLateral.setVisible(true);
+            menuButton.setLayoutX(menuLateral.getPrefWidth() + 10); // Move o botão para o lado direito do menu
         } else {
-            eventosContainer.getChildren().remove(menuLateral);
+            // Esconde o menu lateral
+            menuLateral.setVisible(false);
+            menuButton.setLayoutX(10); // Retorna o botão para o canto esquerdo
         }
         menuAberto = !menuAberto;
     }
@@ -105,6 +109,7 @@ public class TelaEventosController {
     private VBox criarMenu() {
         VBox menu = new VBox(10);
         menu.setStyle("-fx-background-color: #333333; -fx-padding: 20;");
+        menu.setPrefWidth(200);
 
         Label lblTitulo = new Label("Menu");
         lblTitulo.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 18; -fx-font-weight: bold;");
@@ -120,16 +125,19 @@ public class TelaEventosController {
         Button btnSair = new Button("Sair");
         btnSair.setStyle("-fx-background-color: #ff4c4c; -fx-text-fill: #ffffff;");
         btnSair.setOnAction(e -> {
-            // Redireciona para a tela de login
             App.abrirTela("telaLogin.fxml", "Login");
         });
 
         menu.getChildren().addAll(lblTitulo, btnHome, btnPerfil, btnSair);
 
+        // Inicialmente o menu estará invisível
+        menu.setVisible(false);
+
         return menu;
     }
 
     // Método para exibir a tela de eventos
+    @FXML
     private void exibirTelaEventos() {
         eventosContainer.getChildren().clear(); // Limpar container
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -142,6 +150,7 @@ public class TelaEventosController {
     }
 
     // Método para exibir a tela do perfil do usuário
+    @FXML
     private void exibirPerfilUsuario() {
         eventosContainer.getChildren().clear(); // Limpar container
 
@@ -164,6 +173,11 @@ public class TelaEventosController {
         }
 
         eventosContainer.getChildren().add(perfilBox);
+    }
+
+    @FXML
+    public void abrirTelaLogin(ActionEvent event) {
+        App.abrirTela("telaLogin.fxml", "Login");
     }
 
 }

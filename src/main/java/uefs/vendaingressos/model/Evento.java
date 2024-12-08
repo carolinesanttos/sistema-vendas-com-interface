@@ -470,4 +470,12 @@ public class Evento {
     public int getQuantidadeAssentos() {
         return assentosDisponiveis.size();
     }
+
+    public void setAssentosReservados(List<String> assentosReservados) {
+        this.assentosReservados = assentosReservados;
+    }
+
+    public void setIngressosDisponiveis(List<Ingresso> ingressosDisponiveis) {
+        this.ingressosDisponiveis = ingressosDisponiveis;
+    }
 }

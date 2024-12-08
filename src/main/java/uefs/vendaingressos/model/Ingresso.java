@@ -13,6 +13,8 @@
 
 package uefs.vendaingressos.model;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.*;
 
 /**
@@ -25,16 +27,21 @@ import java.util.*;
  * A comparação de ingressos é feita com base em preço, evento e assento.
  */
 public class Ingresso {
+    @Expose
     private double preco;
     private transient boolean status;
     private transient Evento evento;
+    @Expose
     private String nomeEvento;
+    @Expose
     private String assento;
     private transient Usuario usuario;
+    @Expose
     private Compra compra;
 
     public Ingresso(Evento evento, double valor, String assento) {
         this.evento = evento;
+        this.nomeEvento = evento.getNome();
         this.preco = valor;
         this.assento = assento;
         this.status = true; // Ingressos inicialmente estão ativos.
