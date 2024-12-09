@@ -269,7 +269,6 @@ public class Evento {
      */
     public Evento buscarEventoPorNome(String name) {
         for (Evento evento : getEventosCadastrados()) {
-            System.out.println(evento.nome);
             if (evento.getNome().equalsIgnoreCase(name)) {
                 return evento;
             }
@@ -366,7 +365,6 @@ public class Evento {
      */
     public void adicionarFeedbacks (Feedback feedback) {
         feedbacks.add(feedback);
-        System.out.println(feedback.getNota() + " " + feedback.getComentario());
     }
 
     /**

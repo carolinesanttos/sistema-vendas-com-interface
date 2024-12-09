@@ -2,7 +2,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaCompraController">
+<ScrollPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uefs.vendaingressos.TelaCompraController">
     <VBox fx:id="containerCompra" spacing="10" style="-fx-padding: 20;" fillWidth="true" >
         <Label fx:id="labelTutorial" wrapText="true" style="-fx-font-size: 14; -fx-font-weight: bold;" />
         <!-- Informações do evento (adicionadas dinamicamente) -->

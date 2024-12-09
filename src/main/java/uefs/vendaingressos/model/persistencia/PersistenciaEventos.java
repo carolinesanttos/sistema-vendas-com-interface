@@ -49,7 +49,6 @@ public class PersistenciaEventos{
         try {
             writer = new FileWriter(caminhoArquivo);
             gson.toJson(eventosAtivos, writer);
-            System.out.println("Chegou aqui " + eventosAtivos.get(0).getNome() + " eventos");
         } catch (IOException e) {
             throw new RuntimeException("Não foi possível salvar os dados em " + caminhoArquivo + ": " + e.getMessage());
         } finally {
