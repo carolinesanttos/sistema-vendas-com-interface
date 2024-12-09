@@ -31,9 +31,6 @@ public class TelaLoginController {
     private Button botaoEntrar;
 
     @FXML
-    private Hyperlink botaoEsqueciSenha;
-
-    @FXML
     private Hyperlink botaoIrCriarConta;
 
     @FXML

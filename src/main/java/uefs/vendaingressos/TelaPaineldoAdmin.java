@@ -66,9 +66,6 @@ public class TelaPaineldoAdmin implements Initializable {
     private Button botaoSair;
 
     @FXML
-    private Button botaoSalvarEdicao;
-
-    @FXML
     private Label labelDetalhesEvento;
 
     @FXML

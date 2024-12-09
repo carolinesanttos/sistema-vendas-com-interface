@@ -24,7 +24,6 @@ import uefs.vendaingressos.model.*;
 import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
 import uefs.vendaingressos.model.persistencia.PersistenciaEventos;
 import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -42,9 +41,6 @@ public class TelaEventosController {
 
     @FXML
     private VBox menuLateral; // Contêiner do menu
-
-    @FXML
-    private Button botaoModificar;
 
     private boolean menuAberto = false; // Estado do menu
 
