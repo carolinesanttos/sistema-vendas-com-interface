@@ -141,11 +141,19 @@ public class Usuario {
         return false; // Usuário não encontrado
     }
 
+    /**
+     * Método que retorna um objeto Usuario caso o login e senha estejam corretos.
+     *
+     * @param login o login do usuário.
+     * @param senha a senha do usuário.
+     * @return o objeto Usuario se as credenciais estiverem corretas, caso contrário, retorna null.
+     */
     public Usuario validarLogin2 (String login, String senha) {
         for (Usuario usuario : usuariosCadastrados) {
             if (usuario.getLogin().equals(login)) {
                 // Se o login estiver cadastrado, verifica a senha
                 if (usuario.getSenha().equals(senha)) {
+                    usuario.setLogado(true);
                     return usuario; // Usuário encontrado
                 }
             }
@@ -153,6 +161,13 @@ public class Usuario {
         return null;
     }
 
+    /**
+     * Valida se um login ou email já está cadastrado no sistema.
+     *
+     * @param login o login do usuário.
+     * @param email o email do usuário.
+     * @return true se o login ou email já estiver cadastrado, caso contrário, false.
+     */
     public boolean validarCadastro(String login, String email) {
         for (Usuario usuario : usuariosCadastrados) {
             if (usuario.getLogin().equals(login) || usuario.getEmail().equals(email)) {
@@ -190,7 +205,6 @@ public class Usuario {
         } else {
             throw new FormaDePagamentoInvalidaException("Forma de pagamento inválida.");
         }
-
     }
 
     /**
@@ -205,7 +219,6 @@ public class Usuario {
         } else {
             throw new NaoEncontradoException("Forma de pagamento não encontrada.");
         }
-
     }
 
     /**
@@ -262,7 +275,6 @@ public class Usuario {
                 }
             }
         }
-
         throw new ReembolsoException("A compra já foi cancelada anteriormente, e o reembolso já foi processado."); // Não encontrado ou fora do prazo
     }
 
@@ -323,7 +335,6 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-
     }
 
     public String getLogin() {
@@ -388,7 +399,6 @@ public class Usuario {
 
     public void setFormasDePagamento(List<Pagamento> formasDePagamento) {
         this.formasDePagamento = formasDePagamento;
-        System.out.println("Dentro de setFormasDePagamento Usuario " + this.nome + " " + formasDePagamento);
     }
 
     public void setIngressosComprados(List<Compra> ingressosComprados) {

@@ -13,6 +13,7 @@
 
 package uefs.vendaingressos.model;
 
+import com.google.gson.annotations.Expose;
 import uefs.vendaingressos.model.Evento;
 import uefs.vendaingressos.model.Usuario;
 import uefs.vendaingressos.model.excecoes.*;;
@@ -23,9 +24,12 @@ import uefs.vendaingressos.model.excecoes.*;;
  * O feedback só pode ser criado se o usuário estiver logado.
  */
 public class Feedback {
+
     private Usuario usuario;
     private Evento evento;
+    @Expose
     private int nota; // Avaliação de 1 a 5
+    @Expose
     private String comentario;
 
     /**

@@ -42,8 +42,6 @@ public class Evento {
     private boolean status;
     @Expose
     private Usuario usuario;
-
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     @Expose
     private static List<Evento> eventosCadastrados = new ArrayList<>();
     @Expose
@@ -57,6 +55,7 @@ public class Evento {
     @Expose
     private List<Feedback> feedbacks = new ArrayList<>();
     private PersistenciaEventos persistenciaEventos  = new PersistenciaEventos("detalhes-do-evento.json");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 
     public Evento(String nome, String descricao, Date data) {
@@ -83,7 +82,6 @@ public class Evento {
     }
 
     public Evento() {
-
     }
 
     /**
@@ -111,13 +109,10 @@ public class Evento {
         boolean contemEvento = eventosCadastrados.contains(evento);
         if (!contemEvento) {
             eventosCadastrados.add(evento);
-            //persistenciaEventos.salvarDados(eventosCadastrados);
         } else {
             throw new CadastroException("Evento já cadastrado.");
         }
     }
-
-
 
     /**
      * Adiciona assento à lista de assentos disponíveis.
@@ -134,25 +129,29 @@ public class Evento {
         }
     }
 
+    /**
+     * Gera os assentos do evento de forma automatizada, alternando entre linhas A, B, C, etc.
+     * A quantidade de assentos é limitada pela quantidade especificada.
+     *
+     * @param quantidade quantidade de assentos a serem gerados.
+     */
     public void gerarAssentos(int quantidade) {
-        assentosDisponiveis.clear(); // Limpa qualquer dado anterior
+        assentosDisponiveis.clear();
 
-        // Define o número máximo de colunas (exemplo: 10)
         int colunasPorLinha = 25;
         int totalLinhas = (int) Math.ceil((double) quantidade / colunasPorLinha);
 
-        // Geração dos assentos alternando entre linhas A, B, C...
+        // Geração dos assentos alternando entre linhas A, B, C..
         for (int linha = 0; linha < totalLinhas; linha++) {
-            char letraLinha = (char) ('A' + linha); // Converte índice para letra (A, B, C...)
+            char letraLinha = (char) ('A' + linha); // Converte índice para letra (A, B, C..)
             for (int coluna = 1; coluna <= colunasPorLinha; coluna++) {
                 int numeroAssento = linha * colunasPorLinha + coluna; // Gera o número do assento
                 if (numeroAssento > quantidade) {
                     break;
-                } // Para ao atingir a quantidade de assentos
-                assentosDisponiveis.add(letraLinha + String.valueOf(coluna)); // Exemplo: A1, B2, C3
+                }
+                assentosDisponiveis.add(letraLinha + String.valueOf(coluna)); // Exemplo A1, B2, C3
             }
         }
-        //persistenciaEventos.salvarDados(eventosCadastrados);
     }
 
     /**
@@ -160,7 +159,6 @@ public class Evento {
      *
      * @param assento assento a ser removido.
      */
-
     public boolean reservarAssento(String assento) {
         if (assentosDisponiveis.contains(assento)) {
             assentosDisponiveis.remove(assento);
@@ -170,6 +168,11 @@ public class Evento {
         return false;
     }
 
+    /**
+     * Libera um assento reservado, retornando-o à lista de assentos disponíveis.
+     *
+     * @param assento o identificador do assento a ser liberado.
+     */
     public void liberarAssento(String assento) {
         if (assentosReservados.contains(assento)) {
             assentosReservados.remove(assento);
@@ -177,6 +180,12 @@ public class Evento {
         }
     }
 
+    /**
+     * Remove um assento da lista de assentos disponíveis.
+     *
+     * @param assento o identificador do assento a ser removido.
+     * @throws CadastroException se o assento não estiver na lista de assentos disponíveis.
+     */
     public void removerAssentoDisponivel(String assento)     {
         boolean contemAssento = assentosDisponiveis.contains(assento);
         if (contemAssento) {
@@ -208,14 +217,12 @@ public class Evento {
      * @throws CadastroException se o ingresso já estiver cadastrado.
      */
     public void adicionarIngresso(Ingresso ingresso) {
-        // Primeiro, verificar se o ingresso já está cadastrado
         for (Ingresso ing : ingressosDisponiveis) {
             if (ing.getEvento().getNome().equals(ingresso.getEvento().getNome()) &&
                     ing.getAssento().equals(ingresso.getAssento())) {
                 throw new CadastroException("Ingresso já adicionado.");
             }
         }
-        // Se não encontrou nenhum ingresso duplicado, adiciona
         ingressosDisponiveis.add(ingresso);
     }
 
@@ -359,6 +366,7 @@ public class Evento {
      */
     public void adicionarFeedbacks (Feedback feedback) {
         feedbacks.add(feedback);
+        System.out.println(feedback.getNota() + " " + feedback.getComentario());
     }
 
     /**
@@ -411,7 +419,11 @@ public class Evento {
         return assentosReservados;
     }
 
-    public List<Evento> getEventosCadastrados() {
+    public static List<Evento> getEventosCadastrados() {
+        return eventosCadastrados;
+    }
+
+    public List<Evento> listaEventosCadastrados() {
         return eventosCadastrados;
     }
 
@@ -477,5 +489,9 @@ public class Evento {
 
     public void setIngressosDisponiveis(List<Ingresso> ingressosDisponiveis) {
         this.ingressosDisponiveis = ingressosDisponiveis;
+    }
+
+    public void adicionarIngressoComprado(Ingresso ingressosComprado) {
+        ingressosComprados.add(ingressosComprado);
     }
 }

@@ -1,0 +1,5 @@
+module:uefs.sistemavendas3
+uefs.vendaingressos
+uefs.vendaingressos.model
+uefs.vendaingressos.model.excecoes
+uefs.vendaingressos.model.persistencia

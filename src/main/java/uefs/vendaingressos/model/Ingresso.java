@@ -138,6 +138,10 @@ public class Ingresso {
         return compra;
     }
 
+    public String getNomeEvento() {
+        return nomeEvento;
+    }
+
     public void setPreco(float preco) {
         this.preco = preco;
     }

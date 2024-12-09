@@ -1,3 +1,16 @@
+/**
+ * Sistema Operacional: Windows 10 - 64 Bits
+ * IDE: IntelliJ
+ * Versão Da Linguagem: Java JDK 22
+ * Autor: Caroline Santos de Jesus
+ * Componente Curricular: Algoritmos II
+ * Concluído em: 08/12/2024
+ * Declaro que este código foi elaborado por mim de forma individual e não contém nenhum trecho de código de outro
+ * colega ou de outro autor, tais como provindos de livros e apostilas, e páginas ou documentos eletrônicos da Internet.
+ * Qualquer trecho de código de outra autoria que não a minha está destacado com uma citação para o autor e a fonte do
+ * código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
+ */
+
 package uefs.vendaingressos;
 
 import javafx.fxml.FXML;
@@ -12,10 +25,10 @@ import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
 import java.util.List;
 
+/**
+ * Controller para gerenciar a tela de compra de ingressos.
+ */
 public class TelaCompraController {
-
-    private static Evento eventoSelecionado;
-    private Usuario usuarioLogado = UsuarioLogado.getUsuarioAtual();
 
     @FXML
     private VBox containerCompra;
@@ -30,30 +43,33 @@ public class TelaCompraController {
     private ComboBox<String> comboFormasPagamento;
 
     @FXML
-    private Button btnConfirmarAssento;
+    private Button botaoConfirmarAssento;
 
     @FXML
-    private Button btnAdicionarPagamento;
+    private Button botaoAdicionarPagamento;
 
     @FXML
-    private Button btnFinalizarCompra;
+    private Button botaoFinalizarCompra;
 
     @FXML
-    private Button btnCancelarCompra;
+    private Button botaoCancelarCompra;
 
     @FXML
-    private Label lblTutorial;
+    private Label labelTutorial;
 
     PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios("usuarios.json");
+
     PersistenciaEventos persistenciaEventos = new PersistenciaEventos("detalhes-do-evento.json");
 
-    // Assento selecionado
     private String assentoSelecionado;
 
-    public static void setEventoSelecionado(Evento evento) {
-        eventoSelecionado = evento;
-    }
+    private static Evento eventoSelecionado;
 
+    private Usuario usuarioLogado = UsuarioLogado.getUsuarioAtual();
+
+    /**
+     * Método de inicialização para configurar os elementos da tela.
+     */
     @FXML
     public void initialize() {
         if (eventoSelecionado == null || usuarioLogado == null) {
@@ -61,7 +77,7 @@ public class TelaCompraController {
             return;
         }
 
-        lblTutorial.setText(
+        labelTutorial.setText(
                 "Bem-vindo à compra de ingressos!\n" +
                         "1. Selecione um tipo de ingresso.\n" +
                         "2. Escolha um assento disponível na lista.\n" +
@@ -71,44 +87,65 @@ public class TelaCompraController {
                         "6. Clique em \"Finalizar Compra\" para concluir.\n"
         );
 
-
         carregarDetalhesEvento();
         carregarTiposIngressos();
         carregarAssentosDisponiveis();
         carregarFormasPagamento();
-
         configurarBotoes();
     }
 
-    private void carregarDetalhesEvento() {
-        Label lblNome = new Label("Evento: " + eventoSelecionado.getNome());
-        Label lblData = new Label("Data: " + eventoSelecionado.getData());
-        Label lblValor = new Label("Preço Base: R$ " + eventoSelecionado.getValor());
-
-        containerCompra.getChildren().addAll(lblNome, lblData, lblValor);
+    /**
+     * Define o evento selecionado para a compra.
+     *
+     * @param evento O evento a ser selecionado.
+     */
+    public static void setEventoSelecionado(Evento evento) {
+        eventoSelecionado = evento;
     }
 
-    private void carregarTiposIngressos() {
+    /**
+     * Carrega os detalhes do evento selecionado na interface.
+     */
+    public void carregarDetalhesEvento() {
+        Label labelNome = new Label("Evento: " + eventoSelecionado.getNome());
+        Label labelData = new Label("Data: " + eventoSelecionado.getData());
+        Label labelValor = new Label("Preço Base: R$ " + eventoSelecionado.getValor());
+
+        containerCompra.getChildren().addAll(labelNome, labelData, labelValor);
+    }
+
+    /**
+     * Carrega os tipos de ingressos disponíveis no combo box.
+     */
+    public void carregarTiposIngressos() {
         comboTiposIngressos.getItems().addAll("Inteira", "Meia", "VIP");
         comboTiposIngressos.getSelectionModel().selectFirst();
     }
 
-    private void carregarAssentosDisponiveis() {
+    /**
+     * Carrega os assentos disponíveis para o evento.
+     */
+    public void carregarAssentosDisponiveis() {
         listAssentosDisponiveis.getItems().addAll(eventoSelecionado.getAssentosDisponiveis());
     }
 
-    private void carregarFormasPagamento() {
+    /**
+     * Carrega as formas de pagamento cadastradas pelo usuário.
+     */
+    public void carregarFormasPagamento() {
         usuarioLogado.getFormasDePagamento().forEach(pagamento ->
                 comboFormasPagamento.getItems().add(pagamento.getFormaDePagamento())
         );
         comboFormasPagamento.getSelectionModel().selectFirst();
     }
 
-    private void configurarBotoes() {
-        btnConfirmarAssento.setOnAction(e -> {
+    /**
+     * Configura as ações dos botões da tela de compra.
+     */
+    public void configurarBotoes() {
+        botaoConfirmarAssento.setOnAction(e -> {
             assentoSelecionado = listAssentosDisponiveis.getSelectionModel().getSelectedItem();
             if (assentoSelecionado != null) {
-                // Remove visualmente do ListView, mas não reserva no evento ainda
                 listAssentosDisponiveis.getItems().remove(assentoSelecionado);
                 App.exibirMensagemInfo("Assento Selecionado", "Você selecionou o assento: " + assentoSelecionado);
             } else {
@@ -116,34 +153,27 @@ public class TelaCompraController {
             }
         });
 
-        btnAdicionarPagamento.setOnAction(e -> {
+        botaoAdicionarPagamento.setOnAction(e -> {
             String novaFormaPagamento = App.exibirDialogoTexto("Adicionar Forma de Pagamento", "Digite a nova forma de pagamento:");
             if (novaFormaPagamento != null && !novaFormaPagamento.isEmpty() &&
                     (novaFormaPagamento.equalsIgnoreCase("Cartão") || novaFormaPagamento.equalsIgnoreCase("Boleto"))) {
 
-                // Carrega os dados existentes
                 List<Usuario> usuariosCadastrados = persistenciaUsuarios.carregarDados();
 
-                // Cria a nova forma de pagamento
                 Pagamento novoPagamento = criarPagamento(novaFormaPagamento);
 
-                // Adiciona a nova forma de pagamento ao usuário logado
                 usuarioLogado.adicionarFormaDePagamento(novoPagamento);
 
-                // Atualiza apenas o usuário logado na lista carregada
                 for (int i = 0; i < usuariosCadastrados.size(); i++) {
                     Usuario usuario = usuariosCadastrados.get(i);
                     if (usuario.getLogin().equals(usuarioLogado.getLogin())) {
-                        // Substitui o usuário antigo pelo atualizado
                         usuariosCadastrados.set(i, usuarioLogado);
                         break;
                     }
                 }
 
-                // Salva a lista de usuários atualizada
                 persistenciaUsuarios.salvarDados(usuariosCadastrados);
 
-                // Atualiza a interface do usuário
                 comboFormasPagamento.getItems().add(novoPagamento.getFormaDePagamento());
                 App.exibirMensagemInfo("Forma de Pagamento", "Forma de pagamento adicionada com sucesso.");
             } else {
@@ -151,7 +181,7 @@ public class TelaCompraController {
             }
         });
 
-        btnFinalizarCompra.setOnAction(e -> {
+        botaoFinalizarCompra.setOnAction(e -> {
             String tipoIngresso = comboTiposIngressos.getSelectionModel().getSelectedItem();
             String formaPagamento = comboFormasPagamento.getSelectionModel().getSelectedItem();
 
@@ -165,13 +195,11 @@ public class TelaCompraController {
                 return;
             }
 
-            // Cria os objetos relacionados à compra
             Pagamento pagamento = criarPagamento(formaPagamento);
             Ingresso ingresso = new Ingresso(eventoSelecionado, eventoSelecionado.getValor(), assentoSelecionado);
             Compra compra = new Compra(usuarioLogado, ingresso);
             compra.setPagamento(pagamento);
 
-            // Atualiza os dados do sistema
             boolean assentoReservado = eventoSelecionado.reservarAssento(assentoSelecionado);
 
             if (!assentoReservado) {
@@ -181,10 +209,8 @@ public class TelaCompraController {
 
             usuarioLogado.adicionarCompras(compra);
 
-            // Carrega os dados existentes
             List<Usuario> usuariosCadastrados = persistenciaUsuarios.carregarDados();
 
-            // Atualiza a lista de usuários
             for (Usuario usuario : usuariosCadastrados) {
                 if (usuario.getLogin().equals(usuarioLogado.getLogin())) {
                     usuario.setIngressosComprados(usuarioLogado.getIngressosComprados());
@@ -192,16 +218,15 @@ public class TelaCompraController {
                 }
             }
 
-            // Salva os dados atualizados
             persistenciaUsuarios.salvarDados(usuariosCadastrados);
 
-            // Atualiza os dados do evento na persistência
             List<Evento> eventosCadastrados = persistenciaEventos.carregarDados();
 
             for (Evento evento : eventosCadastrados) {
                 if (evento.getNome().equals(eventoSelecionado.getNome())) {
                     evento.setAssentosReservados(eventoSelecionado.getAssentosReservados());
-                    evento.setIngressosDisponiveis(eventoSelecionado.getIngressosDisponiveis());
+                    evento.setAssentosDisponiveis(eventoSelecionado.getAssentosDisponiveis());
+                    evento.adicionarIngressoComprado(ingresso);
                     break;
                 }
             }
@@ -217,14 +242,20 @@ public class TelaCompraController {
             App.abrirTela("telaEventos.fxml", "Tela Eventos");
         });
 
-        btnCancelarCompra.setOnAction(e -> {
+        botaoCancelarCompra.setOnAction(e -> {
             App.exibirMensagemInfo("Compra Cancelada", "A operação foi cancelada com sucesso.");
             App.abrirTela("telaEventos.fxml", "Tela Eventos"); // Ajuste o nome da tela para onde o usuário deve ser redirecionado.
         });
 
     }
 
-    private Pagamento criarPagamento(String formaPagamento) {
+    /**
+     * Cria um objeto de pagamento com base na forma escolhida.
+     *
+     * @param formaPagamento A forma de pagamento selecionada ("Cartão" ou "Boleto").
+     * @return O objeto de pagamento correspondente à forma escolhida.
+     */
+    public Pagamento criarPagamento(String formaPagamento) {
         if (formaPagamento.equalsIgnoreCase("Cartão")) {
             Pagamento pagamentoCartao = new Pagamento(usuarioLogado.getNome(), "1234-5678-9012-3456", "12/24", "123");
             return pagamentoCartao;

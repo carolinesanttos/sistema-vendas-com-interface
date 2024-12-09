@@ -1,23 +1,30 @@
+/**
+ * Sistema Operacional: Windows 10 - 64 Bits
+ * IDE: IntelliJ
+ * Versão Da Linguagem: Java JDK 22
+ * Autor: Caroline Santos de Jesus
+ * Componente Curricular: Algoritmos II
+ * Concluído em: 08/12/2024
+ * Declaro que este código foi elaborado por mim de forma individual e não contém nenhum trecho de código de outro
+ * colega ou de outro autor, tais como provindos de livros e apostilas, e páginas ou documentos eletrônicos da Internet.
+ * Qualquer trecho de código de outra autoria que não a minha está destacado com uma citação para o autor e a fonte do
+ * código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
+ */
+
 package uefs.vendaingressos;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import uefs.vendaingressos.model.Usuario;
-import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
-import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Controlador que gerencia as interações da tela de login e cadastro.
+ * Permite realizar login, cadastrar novos usuários e navegar entre as telas.
+ */
 public class TelaLoginController {
 
     @FXML
@@ -49,6 +56,11 @@ public class TelaLoginController {
 
     private Usuario usuario = new Usuario();
 
+    /**
+     * Realiza o processo de login verificando os dados fornecidos pelo usuário.
+     * Redireciona para o painel do administrador (se for admin) ou para o painel de eventos (se for usuário comum).
+     * @param event evento gerado pelo botão de login.
+     */
     @FXML
     public void fazerLogin(ActionEvent event) {
         String user = campoLogin.getText();
@@ -58,7 +70,6 @@ public class TelaLoginController {
 
         if (!user.isEmpty() && !senha.isEmpty() && usuarioAtivo != null) {
             if (user.equals("admin") && senha.equals("senha123")) {
-                // Login válido - Redireciona para TelaCadastroEvento
                 App.abrirTela("telaPaineldoAdmin.fxml", "Painel do administrador");
             } else {
                 UsuarioLogado.setUsuarioAtual(usuarioAtivo);
@@ -69,13 +80,22 @@ public class TelaLoginController {
         }
     }
 
+    /**
+     * Abre a tela de cadastro de usuário.
+     * @param event evento gerado pelo botão de ir para a tela de cadastro.
+     */
     @FXML
     public void abrirTelaCadastro(ActionEvent event) {
         App.abrirTela("telaCadastro.fxml", "Cadastro");
     }
 
+    /**
+     * Realiza o processo de cadastro de um novo usuário, validando os dados fornecidos.
+     * Exibe mensagens de erro em caso de falha ou redireciona para a tela de login após o cadastro.
+     * @param event evento gerado pelo botão de cadastro.
+     */
     @FXML
-    void fazerCadastro(ActionEvent event) {
+    public void fazerCadastro(ActionEvent event) {
 
         String nome = campoNomeCompleto.getText();
         String cpf = campoCpf.getText();
@@ -95,22 +115,24 @@ public class TelaLoginController {
 
     }
 
+    /**
+     * Abre a tela de login.
+     */
     @FXML
-    void abrirTelaLogin() {
+    public void abrirTelaLogin() {
         App.abrirTela("telaLogin.fxml", "Login");
     }
 
-
-    @FXML
-    void alterarSenha(ActionEvent event) {
-
-    }
-
+    /**
+     * Exibe uma mensagem de erro utilizando um alerta.
+     * @param titulo título do alerta.
+     * @param mensagemErro mensagem detalhada do erro a ser exibido.
+     */
     public void exibirMensagemdeErro(String titulo, String mensagemErro) {
-        Alert alerta = new Alert(Alert.AlertType.ERROR);  // Cria um alerta de erro
-        alerta.setTitle(titulo);  // Define o título do alerta
-        alerta.setContentText(mensagemErro);  // Define a mensagem do alerta
-        alerta.showAndWait();  // Mostra o alerta e espera o usuário fechar
+        Alert alerta = new Alert(Alert.AlertType.ERROR);
+        alerta.setTitle(titulo);
+        alerta.setContentText(mensagemErro);
+        alerta.showAndWait();
     }
 
 }

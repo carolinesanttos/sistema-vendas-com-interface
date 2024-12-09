@@ -1,38 +1,50 @@
+/**
+ * Sistema Operacional: Windows 10 - 64 Bits
+ * IDE: IntelliJ
+ * Versão Da Linguagem: Java JDK 22
+ * Autor: Caroline Santos de Jesus
+ * Componente Curricular: Algoritmos II
+ * Concluído em: 08/12/2024
+ * Declaro que este código foi elaborado por mim de forma individual e não contém nenhum trecho de código de outro
+ * colega ou de outro autor, tais como provindos de livros e apostilas, e páginas ou documentos eletrônicos da Internet.
+ * Qualquer trecho de código de outra autoria que não a minha está destacado com uma citação para o autor e a fonte do
+ * código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
+ */
+
 package uefs.vendaingressos;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import uefs.vendaingressos.model.Evento;
-import uefs.vendaingressos.model.Usuario;
+import uefs.vendaingressos.model.*;
 import uefs.vendaingressos.model.excecoes.NaoEncontradoException;
 import uefs.vendaingressos.model.persistencia.PersistenciaEventos;
+import uefs.vendaingressos.model.persistencia.PersistenciaUsuarios;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static javafx.application.Application.launch;
-
+/**
+ * Controller que gerencia tela de eventos.
+ * Gerencia a exibição de eventos, perfil do usuário e interações com a interface.
+ */
 public class TelaEventosController {
 
     @FXML
     private VBox eventosContainer;
 
     @FXML
-    private Button menuButton;
+    private Button botaoMenu;
 
     @FXML
     private VBox menuLateral; // Contêiner do menu
+
+    @FXML
+    private Button botaoModificar;
 
     private boolean menuAberto = false; // Estado do menu
 
@@ -42,24 +54,34 @@ public class TelaEventosController {
 
     PersistenciaEventos persistenciaEventos = new PersistenciaEventos("detalhes-do-evento.json");
 
+    SimpleDateFormat formatar = new SimpleDateFormat("dd/MM/yyyy");
+
+    /**
+     * Método inicializado automaticamente.
+     * Carrega os eventos da persistência e exibe no container.
+     */
     @FXML
     public void initialize() {
-        // Carregar eventos da persistência
-        eventos = persistenciaEventos.carregarDados();  // Método fictício para carregar eventos da persistência
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        eventos = persistenciaEventos.carregarDados();
 
-        // Exibir eventos carregados
         for (Evento evento : eventos) {
-            String dataEvento = formatter.format(evento.getData());
+            String dataEvento = formatar.format(evento.getData());
 
             VBox eventoBox = criarEvento(evento.getNome(), evento.getDescricao(), dataEvento, String.valueOf(evento.getValor()));
             eventosContainer.getChildren().add(eventoBox);
         }
     }
 
-    // Método auxiliar para criar um evento
-    private VBox criarEvento(String nome, String descricao, String data, String valor) {
+    /**
+     * Cria componentes visuais para exibir detalhes dos evento.
+     * @param nome Nome do evento
+     * @param descricao Descrição do evento
+     * @param data Data do evento
+     * @param valor Valor do ingresso
+     * @return Um VBox contendo os dados do evento
+     */
+    public VBox criarEvento(String nome, String descricao, String data, String valor) {
         VBox eventoBox = new VBox(10);
         eventoBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
 
@@ -72,11 +94,9 @@ public class TelaEventosController {
         botaoComprar.setStyle("-fx-background-color: #827fe3; -fx-text-fill: #ffffff;");
 
         botaoComprar.setOnAction(e -> {
-            // Buscar o evento correspondente
             try {
                 Evento eventoSelecionado = evento.buscarEventoPorNome(nome);
                 if (eventoSelecionado != null) {
-                    // Passar o evento para a próxima tela
                     TelaCompraController.setEventoSelecionado(eventoSelecionado);
                     App.abrirTela("telaCompra.fxml", "Compra de Ingressos");
                 }
@@ -90,91 +110,192 @@ public class TelaEventosController {
         return eventoBox;
     }
 
-    // Método do menu para mostrar a interação com a tela (ainda sem funcionalidades implementadas)
+    /**
+     * Responsável pela isibilidade do menu lateral.
+     */
     @FXML
     public void abrirMenu() {
         if (!menuAberto) {
             // Exibe o menu lateral
             menuLateral.setVisible(true);
-            menuButton.setLayoutX(menuLateral.getPrefWidth() + 10); // Move o botão para o lado direito do menu
+            botaoMenu.setLayoutX(menuLateral.getPrefWidth() + 10);
         } else {
             // Esconde o menu lateral
             menuLateral.setVisible(false);
-            menuButton.setLayoutX(10); // Retorna o botão para o canto esquerdo
+            botaoMenu.setLayoutX(10);
         }
         menuAberto = !menuAberto;
     }
 
-    // Método para criar o menu lateral
-    private VBox criarMenu() {
-        VBox menu = new VBox(10);
-        menu.setStyle("-fx-background-color: #333333; -fx-padding: 20;");
-        menu.setPrefWidth(200);
-
-        Label lblTitulo = new Label("Menu");
-        lblTitulo.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 18; -fx-font-weight: bold;");
-
-        Button btnHome = new Button("Home");
-        btnHome.setStyle("-fx-background-color: #827fe3; -fx-text-fill: #ffffff;");
-        btnHome.setOnAction(e -> exibirTelaEventos());
-
-        Button btnPerfil = new Button("Perfil do Usuário");
-        btnPerfil.setStyle("-fx-background-color: #827fe3; -fx-text-fill: #ffffff;");
-        btnPerfil.setOnAction(e -> exibirPerfilUsuario());
-
-        Button btnSair = new Button("Sair");
-        btnSair.setStyle("-fx-background-color: #ff4c4c; -fx-text-fill: #ffffff;");
-        btnSair.setOnAction(e -> {
-            App.abrirTela("telaLogin.fxml", "Login");
-        });
-
-        menu.getChildren().addAll(lblTitulo, btnHome, btnPerfil, btnSair);
-
-        // Inicialmente o menu estará invisível
-        menu.setVisible(false);
-
-        return menu;
-    }
-
-    // Método para exibir a tela de eventos
+    /**
+     * Exibe a tela de eventos.
+     */
     @FXML
-    private void exibirTelaEventos() {
+    public void exibirTelaEventos() {
         eventosContainer.getChildren().clear(); // Limpar container
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         for (Evento evento : eventos) {
-            String dataEvento = formatter.format(evento.getData());
+            String dataEvento = formatar.format(evento.getData());
             VBox eventoBox = criarEvento(evento.getNome(), evento.getDescricao(), dataEvento, String.valueOf(evento.getValor()));
             eventosContainer.getChildren().add(eventoBox);
         }
     }
 
-    // Método para exibir a tela do perfil do usuário
+    /**
+     * Exibe o perfil do usuário logado, permitindo edição de informações.
+     */
     @FXML
-    private void exibirPerfilUsuario() {
-        eventosContainer.getChildren().clear(); // Limpar container
+    public void exibirPerfilUsuario() {
+        eventosContainer.getChildren().clear(); // Limpar o container
 
         VBox perfilBox = new VBox(10);
         perfilBox.setStyle("-fx-background-color: #ffffff; -fx-padding: 20;");
 
-        Usuario usuarioAtual = UsuarioLogado.getUsuarioAtual(); // Obtém o usuário logado da Sessão
+        Usuario usuarioAtual = UsuarioLogado.getUsuarioAtual();
 
         if (usuarioAtual != null) {
             Label labelTitulo = new Label("Perfil do Usuário");
             labelTitulo.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
 
-            Label labelNome = new Label("Nome: " + usuarioAtual.getNome());
-            Label labelEmail = new Label("Email: " + usuarioAtual.getEmail());
+            TextField campoNome = new TextField(usuarioAtual.getNome());
+            campoNome.setPromptText("Atualize seu nome");
 
-            perfilBox.getChildren().addAll(labelTitulo, labelNome, labelEmail);
+            TextField campoEmail = new TextField(usuarioAtual.getEmail());
+            campoEmail.setPromptText("Atualize seu email");
+
+            PasswordField campoSenha = new PasswordField();
+            campoSenha.setPromptText("Atualize sua senha");
+
+            Button botaoSalvar = new Button("Salvar Alterações");
+            botaoSalvar.setStyle("-fx-background-color: #827fe3; -fx-text-fill: #ffffff;");
+            botaoSalvar.setOnAction(e -> {
+                usuarioAtual.setNome(campoNome.getText());
+                usuarioAtual.setEmail(campoEmail.getText());
+                if (!campoSenha.getText().isEmpty()) {
+                    usuarioAtual.setSenha(campoSenha.getText());
+                }
+
+                PersistenciaUsuarios persistencia = new PersistenciaUsuarios("usuarios.json");
+                List<Usuario> usuarios = persistencia.carregarDados();
+
+                for (Usuario u : usuarios) {
+                    if (u.equals(usuarioAtual)) {
+                        u.setNome(usuarioAtual.getNome());
+                        u.setEmail(usuarioAtual.getEmail());
+                        u.setSenha(usuarioAtual.getSenha());
+                        break;
+                    }
+                }
+
+                persistencia.salvarDados(usuarios);
+
+                App.exibirMensagemInfo("Sucesso", "Dados atualizados com sucesso!");
+            });
+
+            // Listar eventos comprados
+            Label labelEventos = new Label("Eventos Comprados:");
+            labelEventos.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+            VBox eventosCompradosBox = new VBox(10);
+            eventosCompradosBox.setStyle("-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-border-color: #cccccc;");
+
+            List<Compra> ingressosComprados = usuarioAtual.getIngressosComprados();
+            if (ingressosComprados.isEmpty()) {
+                eventosCompradosBox.getChildren().add(new Label("Nenhum evento comprado."));
+            } else {
+                for (Compra compra : ingressosComprados) {
+                    Ingresso ingresso = compra.getIngresso();
+                    if (ingresso != null) {
+                        Evento ingressoComprado = null;
+                        for (Evento evento : Evento.getEventosCadastrados()) {
+                            if (evento.getNome().equalsIgnoreCase(ingresso.getNomeEvento())) {
+                                ingressoComprado = evento;
+                                break;
+                            }
+                        }
+                        if (ingressoComprado != null) {
+                            String dataEvento = formatar.format(ingressoComprado.getData());
+                            Label eventoLabel = new Label(
+                                    ingressoComprado.getNome() + " - " + ingressoComprado.getValor() + " - " + dataEvento + " - " + ingresso.getAssento()
+                            );
+
+                            Button botaoAvaliar = new Button("Avaliar Evento");
+                            Evento compraDeIngresso = ingressoComprado;
+
+                            List<Evento> eventosAtivos = persistenciaEventos.carregarDados();
+
+                            botaoAvaliar.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent e) {
+                                    exibirTelaAvaliacao(usuarioAtual, compraDeIngresso);
+                                }
+                            });
+
+                            eventosCompradosBox.getChildren().addAll(eventoLabel, botaoAvaliar);
+
+                        } else {
+                            eventosCompradosBox.getChildren().add(new Label("Evento não encontrado."));
+                        }
+                    } else {
+                        eventosCompradosBox.getChildren().add(new Label("Detalhes do ingresso indisponíveis."));
+                    }
+                }
+            }
+            perfilBox.getChildren().addAll(labelTitulo, campoNome, campoEmail, campoSenha, botaoSalvar, labelEventos, eventosCompradosBox);
         } else {
             Label labelErro = new Label("Usuário não logado");
             perfilBox.getChildren().add(labelErro);
         }
-
         eventosContainer.getChildren().add(perfilBox);
     }
 
+    /**
+     * Exibe uma janela para o usuário avaliar um evento.
+     * Permite que o usuário adicione um comentário e atribua uma nota ao evento.
+     * Após a avaliação, o feedback é associado ao evento e os dados são persistidos.
+     *
+     * @param usuarioAtual O usuário que está avaliando o evento.
+     * @param evento O evento a ser avaliado.
+     */
+    public void exibirTelaAvaliacao(Usuario usuarioAtual, Evento evento) {
+        Stage avaliacaoStage = new Stage();
+        VBox vbox = new VBox(10);
+        vbox.setStyle("-fx-padding: 20; -fx-background-color: #f9f9f9;");
+
+        Label titulo = new Label("Avaliar Evento: " + evento.getNome());
+        titulo.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+
+        TextField campoComentario = new TextField();
+        campoComentario.setPromptText("Adicione seu comentário sobre o evento");
+
+        ChoiceBox<Integer> campoNota = new ChoiceBox<>();
+        campoNota.getItems().addAll(1, 2, 3, 4, 5);
+        campoNota.setValue(1);
+
+        Button botaoEnviar = new Button("Enviar Avaliação");
+        botaoEnviar.setStyle("-fx-background-color: #827fe3; -fx-text-fill: #ffffff;");
+        botaoEnviar.setOnAction(e -> {
+            int nota = campoNota.getValue();
+            String comentario = campoComentario.getText();
+
+            evento.adicionarFeedbacks(new Feedback(usuarioAtual, evento, nota, comentario));
+
+            persistenciaEventos.salvarDados(evento.listaEventosCadastrados());
+
+            avaliacaoStage.close();
+        });
+
+        vbox.getChildren().addAll(titulo, campoComentario, campoNota, botaoEnviar);
+        Scene cena = new Scene(vbox);
+        avaliacaoStage.setScene(cena);
+        avaliacaoStage.setTitle("Avaliar Evento");
+        avaliacaoStage.show();
+    }
+
+    /**
+     * Abre a tela de login.
+     * Essa tela é carregada a partir do arquivo FXML especificado.
+     *
+     */
     @FXML
     public void abrirTelaLogin(ActionEvent event) {
         App.abrirTela("telaLogin.fxml", "Login");
